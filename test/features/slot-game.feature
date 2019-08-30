@@ -3,14 +3,18 @@
 Feature: Slot Game
   Try to check that the game works correctly or not?
 
-  Scenario: Verify the win combination
+  Scenario Outline: Verify the win combination
     Given I navigate to the "slot game" page
-    And I set the test data 11145
+    And I set the test data <combination>
     And I click Spin button
-    Then Win 60 coins
-    And The balance shoud be 1059
+    Then Win <coins> coins
+    And The balance shoud be <balance>
 
-  @dev
+    Examples:
+      | combination | coins | balance |
+      | 12345 | 0 | 999 |
+      | 11145 | 60 | 1059 |
+
   Scenario: Verify the balance
     Given I navigate to the "slot game" page
     When I set the balance 1
