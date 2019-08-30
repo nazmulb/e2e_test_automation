@@ -47,10 +47,6 @@ Feature: Slot Game
       | 54444 | 0 | 999 |
       | 43555 | 0 | 999 |
       | 45555 | 0 | 999 |
-      | 23451 | 0 | 999 |
-      | 34512 | 0 | 999 |
-      | 45123 | 0 | 999 |
-      | 51234 | 0 | 999 |
 
   Scenario: Verify the balance
     Given I navigate to the "slot game" page
