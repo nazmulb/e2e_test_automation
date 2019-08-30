@@ -20,3 +20,7 @@ When('I set the test data {int}', async function (value) {
 Then('The balance shoud be {int}', async function (value) {
     await this.page.balanceEquals(value);
 });
+
+Then('Win {int} coins', async function (value) {
+    await this.page.checkWinCoins(value);
+});

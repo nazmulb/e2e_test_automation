@@ -21,7 +21,8 @@ class SlotGamePage extends Page {
         return {
             balanceInput: '#balance-value',
             testDataInput: '#testdata',
-            spinButton: '#spinButton'
+            spinButton: '#spinButton',
+            winboxDiv: '#winbox'
         };
     }
 
@@ -87,6 +88,48 @@ class SlotGamePage extends Page {
         const actualValue = await this.world.helper.getElementAttribute(balanceInput, 'value');
 
         this.world.expect(parseInt(actualValue)).to.equal(expectedValue);
+
+        await this.world.sleep(1000);
+    }
+
+    /**
+     * Check the Spin button is disabled or not?
+     */
+    async isSpinButtonDisabled() {
+        if(this.world.debug) console.log('isSpinButtonDisabled');
+
+        const spinButton = this.elements.spinButton;
+
+        const actualValue = await this.world.helper.isEnabled(spinButton);
+        if(this.world.debug) console.log(actualValue);
+
+        this.world.expect(actualValue).to.equal(false);
+    }
+
+    /**
+     * Check the win coins
+     * @param {Number} coins
+     */
+    async checkWinCoins(coins) {
+        if(this.world.debug) console.log('checkWinCoins');
+
+        let expectedValue = false;
+        const winboxDiv = this.elements.winboxDiv;
+
+        let actualValue = await this.world.helper.isDisplayed(winboxDiv);
+        if(this.world.debug) console.log(actualValue);
+        
+        if(parseInt(coins)>0) expectedValue = true;
+
+        this.world.expect(actualValue).to.equal(expectedValue);
+
+        if(expectedValue) {
+            expectedValue = "Win "+coins+" coins";
+            let actualValue = await this.world.helper.getElementText(winboxDiv);
+            if(this.world.debug) console.log(actualValue);
+            
+            this.world.expect(actualValue).to.equal(expectedValue);
+        }
     }
 }
 

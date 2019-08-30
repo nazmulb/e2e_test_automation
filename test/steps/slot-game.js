@@ -7,3 +7,7 @@ When('I set the balance {int}', async function (value) {
 When('I click Spin button', async function () {
     await this.page.clickSpinButton();
 });
+
+Then('Spin button should be disabled', async function () {
+    await this.page.isSpinButtonDisabled();
+});

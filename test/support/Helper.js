@@ -113,7 +113,7 @@ class Helper {
     /**
      * Get Element Text
      * @param {string} locator - css or xpath selector element
-     * @return {string} text
+     * @return {string}
      * @example
      *      helper.getElementText('#divid');
      */
@@ -122,27 +122,84 @@ class Helper {
         await this.world.helper.waitFor(locator);
         const input = await this.world.helper.findElement(locator);
 
-        const text = await input.getText();
-
-        return text;
+        return await input.getText();
     }
 
      /**
      * Get Element Attribute
      * @param {string} locator - css or xpath selector element
-     * @param {string} attribute - id, name, value, class, etc
-     * @return {string} text
+     * @param {string} attribute - name, value, class, etc
+     * @return {string}
      * @example
-     *      helper.getElementAttribute('#divid');
+     *      helper.getElementAttribute('#divid', 'class');
      */
     async getElementAttribute(locator, attribute) {
 
         await this.world.helper.waitFor(locator);
         const input = await this.world.helper.findElement(locator);
 
-        const text = await input.getAttribute(attribute);
+        return await input.getAttribute(attribute);
+    }
 
-        return text;
+    /**
+     * Get Element Css Value
+     * @param {string} locator - css or xpath selector element
+     * @param {string} attribute - width, height, position, visibility, etc
+     * @return {string}
+     * @example
+     *      helper.getCssValue('#divid', 'width');
+     */
+    async getCssValue(locator, attribute) {
+
+        await this.world.helper.waitFor(locator);
+        const input = await this.world.helper.findElement(locator);
+
+        return await input.getCssValue(attribute);
+    }
+
+    /**
+     * Is displayed
+     * @param {string} locator - css or xpath selector element
+     * @return {boolean}
+     * @example
+     *      helper.isDisplayed('#divid');
+     */
+    async isDisplayed(locator) {
+
+        await this.world.helper.waitFor(locator);
+        const input = await this.world.helper.findElement(locator);
+
+        return await input.isDisplayed();
+    }
+
+    /**
+     * Is enabled
+     * @param {string} locator - css or xpath selector element
+     * @return {boolean}
+     * @example
+     *      helper.isEnabled('#divid');
+     */
+    async isEnabled(locator) {
+
+        await this.world.helper.waitFor(locator);
+        const input = await this.world.helper.findElement(locator);
+
+        return await input.isEnabled();
+    }
+
+    /**
+     * Is selected
+     * @param {string} locator - css or xpath selector element
+     * @return {boolean}
+     * @example
+     *      helper.isSelected('#divid');
+     */
+    async isSelected(locator) {
+
+        await this.world.helper.waitFor(locator);
+        const input = await this.world.helper.findElement(locator);
+
+        return await input.isSelected();
     }
 
     /**
