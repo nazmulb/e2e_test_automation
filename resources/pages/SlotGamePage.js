@@ -73,7 +73,6 @@ class SlotGamePage extends Page {
         await this.world.helper.waitFor(spinButton);
         const el = await this.world.helper.findElement(spinButton);
 
-        await this.world.helper.scrollToElement(el);
         await el.click();
         await this.world.sleep(100);
     }
