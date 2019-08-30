@@ -1,1 +1,1 @@
-# e2e_test_automation
+# E2E Test Automation
