@@ -10,7 +10,7 @@ class SlotGamePage extends Page {
      * @returns {String} page url
      */
     get url() {
-        return '/slot_game.html';
+        return '/Test_Task.html';
     }
 
     /**
