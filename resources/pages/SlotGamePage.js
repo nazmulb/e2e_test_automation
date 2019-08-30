@@ -34,6 +34,7 @@ class SlotGamePage extends Page {
         if(this.world.debug) console.log('setBalance');
 
         const balanceInput = this.elements.balanceInput;
+        //const username = this.world.data.user.username;
 
         await this.world.helper.waitFor(balanceInput);
         const input = await this.world.helper.findElement(balanceInput);
@@ -74,7 +75,7 @@ class SlotGamePage extends Page {
 
         await this.world.helper.scrollToElement(el);
         await el.click();
-        await this.world.sleep(2000);
+        await this.world.sleep(100);
     }
 
     /**
@@ -89,7 +90,7 @@ class SlotGamePage extends Page {
 
         this.world.expect(parseInt(actualValue)).to.equal(expectedValue);
 
-        await this.world.sleep(1000);
+        await this.world.sleep(100);
     }
 
     /**
@@ -124,6 +125,8 @@ class SlotGamePage extends Page {
         this.world.expect(actualValue).to.equal(expectedValue);
 
         if(expectedValue) {
+            await this.world.sleep(1000);
+
             expectedValue = "Win "+coins+" coins";
             let actualValue = await this.world.helper.getElementText(winboxDiv);
             if(this.world.debug) console.log(actualValue);
