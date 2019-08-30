@@ -15,6 +15,7 @@ Feature: Slot Game
       | 12345 | 0 | 999 |
       | 11145 | 60 | 1059 |
 
+  @dev
   Scenario: Verify the balance
     Given I navigate to the "slot game" page
     When I set the balance 1
