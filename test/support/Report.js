@@ -8,14 +8,15 @@ const reportPath = path.join("reports")
 class Report {
     /**
      * Generate report
+     * @param {boolean} launchReport
      */
-    static generate() {
+    static generate(launchReport=true) {
         let options = {
                 theme: 'bootstrap',
                 jsonFile: reportPath+'/cucumber_report.json',
                 output: reportPath+'/cucumber_report.html',
                 reportSuiteAsScenarios: true,
-                launchReport: true
+                launchReport: launchReport
             };
      
         reporter.generate(options);

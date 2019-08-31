@@ -36,8 +36,16 @@ jobs:
       - attach_workspace:
           at: ~/e2e
       - run:
-          name: Test
+          name: Test Run
           command: npm run test:ci
+      - run:
+          name: Generate Report
+          command: npm run generate-report
+          when: always
+      - store_test_results:
+          path: ./reports/cucumber_report.json
+      - store_artifacts:
+          path: ./reports/cucumber_report.html
 
 workflows:
   version: 2
