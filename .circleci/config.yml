@@ -2,7 +2,7 @@ version: 2.1
 executors:
   node:
     docker:
-      - image: 'circleci/node:9.8.0-browsers'
+      - image: 'circleci/node:10-browsers'
     shell: /bin/bash
     working_directory: ~/e2e
 
