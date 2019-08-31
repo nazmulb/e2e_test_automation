@@ -88,7 +88,6 @@ class SlotGamePage extends Page {
         const actualValue = await this.world.helper.getElementAttribute(balanceInput, 'value');
 
         this.world.expect(parseInt(actualValue)).to.equal(expectedValue);
-
         await this.world.sleep(100);
     }
 
@@ -104,6 +103,7 @@ class SlotGamePage extends Page {
         if(this.world.debug) console.log(actualValue);
 
         this.world.expect(actualValue).to.equal(false);
+        await this.world.sleep(100);
     }
 
     /**
