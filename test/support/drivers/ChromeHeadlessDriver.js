@@ -5,7 +5,7 @@ const chrome = require('selenium-webdriver/chrome');
 /**
  * Chrome Headless Driver Related Methods
  */
-class ChromeHeadlessDriver extends Driver {
+class ChromeheadlessDriver extends Driver {
     /**
      * Instantiate the object
      */
@@ -26,4 +26,4 @@ class ChromeHeadlessDriver extends Driver {
     }
 }
 
-module.exports = ChromeHeadlessDriver;
+module.exports = ChromeheadlessDriver;

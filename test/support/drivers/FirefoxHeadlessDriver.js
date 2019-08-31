@@ -5,7 +5,7 @@ const firefox = require('selenium-webdriver/firefox');
 /**
  * Firefox Headless Driver Related Methods
  */
-class FirefoxHeadlessDriver extends Driver {
+class FirefoxheadlessDriver extends Driver {
     /**
      * Instantiate the object
      */
@@ -26,4 +26,4 @@ class FirefoxHeadlessDriver extends Driver {
     }
 }
 
-module.exports = FirefoxHeadlessDriver;
+module.exports = FirefoxheadlessDriver;
