@@ -49,8 +49,10 @@ BeforeAll(async function () {
 // Multiple AfterAll hooks are executed in the reverse order that they are defined.
 AfterAll(async function () {
     console.log("Execute after all hook.");
-
-    setTimeout(() => {
-        Report.generate();
-    }, 1000)
+    
+    if(process.env.ENVIRONMENT == "local"){
+        setTimeout(() => {
+            Report.generate();
+        }, 1000);
+    }
 });
