@@ -1,5 +1,4 @@
-@smoke
-
+@game
 Feature: Slot Game
   Try to check that the game works correctly or not?
 

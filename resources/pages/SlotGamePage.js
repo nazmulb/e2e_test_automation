@@ -34,7 +34,6 @@ class SlotGamePage extends Page {
         if(this.world.debug) console.log('setBalance');
 
         const balanceInput = this.elements.balanceInput;
-        //const username = this.world.data.user.username;
 
         await this.world.helper.waitFor(balanceInput);
         const input = await this.world.helper.findElement(balanceInput);
