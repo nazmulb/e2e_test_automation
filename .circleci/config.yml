@@ -36,7 +36,7 @@ jobs:
       - attach_workspace:
           at: ~/e2e
       - run:
-          name: Test Run
+          name: Run Test
           command: npm run test:ci
       - run:
           name: Generate Report
