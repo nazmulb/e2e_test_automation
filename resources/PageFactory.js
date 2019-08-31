@@ -17,9 +17,10 @@ class PageFactory {
      */
     create(name) {
         const fileName = './pages/'+_.upperFirst(_.camelCase(name))+'Page.js';
+        let className;
 
         try {
-            const className = require(fileName);
+            className = require(fileName);
             return new className(this.world);
         } 
         catch (error) {

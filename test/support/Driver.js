@@ -19,9 +19,10 @@ class Driver {
      */
     static create(name) {
         const fileName = './drivers/'+_.capitalize(name)+'Driver.js';
+        let className;
 
         try {
-            const className = require(fileName);
+            className = require(fileName);
             return new className();
         } 
         catch (error) {
