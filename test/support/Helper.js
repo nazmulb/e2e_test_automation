@@ -12,7 +12,7 @@ class Helper {
     constructor(world) {
         this.world = world;
 
-        if(this.world.debug) console.log('Screenshot:constructor');
+        if(this.world.debug) console.log('Helper:constructor');
     }
 
     /**

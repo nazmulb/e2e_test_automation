@@ -12,15 +12,3 @@ When('I reload|refresh page', async function () {
 Then('I see title {string}', async function (expectedTitle) {
     await this.page.titleEquals(expectedTitle);
 });
-
-When('I set the test data {int}', async function (value) {
-    await this.page.setTestData(value);
-});
-
-Then('The balance shoud be {int}', async function (value) {
-    await this.page.balanceEquals(value);
-});
-
-Then('Win {int} coins', async function (value) {
-    await this.page.checkWinCoins(value);
-});

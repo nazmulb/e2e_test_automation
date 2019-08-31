@@ -127,7 +127,7 @@ class SlotGamePage extends Page {
             await this.world.sleep(1000);
 
             expectedValue = "Win "+coins+" coins";
-            let actualValue = await this.world.helper.getElementText(winboxDiv);
+            actualValue = await this.world.helper.getElementText(winboxDiv);
             if(this.world.debug) console.log(actualValue);
 
             this.world.expect(actualValue).to.equal(expectedValue);
