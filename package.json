@@ -4,7 +4,7 @@
   "description": "E2E Test Automation framework using cucumberjs & selenium-webdriver",
   "scripts": {
     "test": "./node_modules/.bin/cucumber-js -p default -p progress_bar -p html_report -t 'not (@mute or @dev)'",
-    "test:ci": "ENVIRONMENT=prod PLATFORM=chromeheadless ./node_modules/.bin/cucumber-js -p default -p progress_bar -t '@smoke'",
+    "test:ci": "ENVIRONMENT=prod PLATFORM=firefoxheadless ./node_modules/.bin/cucumber-js -p default -p progress_bar -t '@smoke'",
     "git:push": "git add . && git commit -m \"updated codes\" && git push origin master"
   },
   "repository": {

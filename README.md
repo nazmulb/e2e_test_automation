@@ -22,7 +22,7 @@ npm i
 ### Environment Variables:
 
 - **ENVIRONMENT** - (string) test environment to target - `local` or `prod`.
-- **PLATFORM** - (string) browser name - `chrome` or `firefox` or `chromeheadless`.
+- **PLATFORM** - (string) browser name - `chrome` or `firefox` or `chromeheadless` or `firefoxheadless`.
 - **DEFAULT_TIMEOUT** - (int) timeout after milliseconds.
 - **DEBUG** - (bool) if you need to see the logs - `true` or `false`.
 
