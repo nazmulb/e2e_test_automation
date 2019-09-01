@@ -1,40 +1,39 @@
-const _ = require('lodash');
+const _ = require("lodash");
 
 /**
  * Driver Related Methods
  */
 class Driver {
-    /**
+	/**
      * Abstract
      */
-    constructor() {
-        if( new.target == Driver ) {
-          throw new Error("Driver can't be instantiated directly.")
-        }
-    }
+	constructor() {
+		if (new.target === Driver) {
+			throw new Error("Driver can't be instantiated directly.");
+		}
+	}
 
-    /**
+	/**
      * Factory
      * @param {String} name - name
      */
-    static create(name) {
-        const fileName = './drivers/'+_.capitalize(name)+'Driver.js';
-        let className;
+	static create(name) {
+		const fileName = `./drivers/${_.capitalize(name)}Driver.js`;
+		let ClassName;
 
-        try {
-            className = require(fileName);
-            return new className();
-        } 
-        catch (error) {
-            throw new Error(className+' driver not found');
-        }
-    }
+		try {
+			ClassName = require(fileName);
+			return new ClassName();
+		} catch (error) {
+			throw new Error(`${ClassName} driver not found`);
+		}
+	}
 
-    /**
-     * Build the driver with capabilities 
+	/**
+     * Build the driver with capabilities
      * @returns {WebDriver} Driver object
      */
-    build() {}
+	build() {}
 }
 
 module.exports = Driver;

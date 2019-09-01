@@ -27,5 +27,6 @@ module.exports = {
     "class-methods-use-this": "off",
     "radix": ["error", "as-needed"],
     "func-names": "off",
+    "max-len": ["error", { "code": 150 }],
   },
 };
