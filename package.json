@@ -10,6 +10,9 @@
     "lint:fix": "npm run lint -- --fix",
     "git:push": "git add . && git commit -m \"updated codes\" && git push origin master"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nazmulb/e2e_test_automation.git"
@@ -35,7 +38,8 @@
     "eslint": "^6.3.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "geckodriver": "^1.16.0"
+    "geckodriver": "^1.16.0",
+    "pre-commit": "^1.2.2"
   },
   "dependencies": {
     "chai": "^4.2.0",
