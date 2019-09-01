@@ -9,6 +9,10 @@ We need the following to have a browser based e2e testing using Cucumber JS:
 - <a href="https://docs.seleniumhq.org/docs/03_webdriver.jsp#setting-up-a-selenium-webdriver-project">Selenium-Webdriver</a>
 - <a href="https://www.npmjs.com/package/cucumber-html-reporter">Cucumber-Html-Reporter</a>
 
+### Quick Reference Guide:
+
+A short and easy <a href="https://github.com/nazmulb/cucumber">Document for Cucumber</a>.
+
 ### Setup:
 
 Please clone this repo and run the following commands:
