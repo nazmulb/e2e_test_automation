@@ -6,7 +6,7 @@
     "test": "ENVIRONMENT=local ./node_modules/.bin/cucumber-js -p default -p progress_bar -p html_report -t 'not (@mute or @dev)'",
     "test:ci": "ENVIRONMENT=prod PLATFORM=chromeheadless ./node_modules/.bin/cucumber-js -p default -p progress_bar -p html_report -t '@smoke'",
     "generate-report": "node ./report.js",
-    "lint": "./node_modules/.bin/eslint resources report.js",
+    "lint": "./node_modules/.bin/eslint resources test report.js cucumber.js",
     "lint:fix": "npm run lint -- --fix",
     "git:push": "git add . && git commit -m \"updated codes\" && git push origin master"
   },

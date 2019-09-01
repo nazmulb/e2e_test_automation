@@ -28,5 +28,6 @@ module.exports = {
     "radix": ["error", "as-needed"],
     "func-names": "off",
     "max-len": ["error", { "code": 150 }],
+    "prefer-arrow-callback": "off",
   },
 };

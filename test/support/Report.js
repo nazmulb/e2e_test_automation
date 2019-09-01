@@ -1,26 +1,27 @@
-const path = require('path');
-const reporter = require('cucumber-html-reporter');
-const reportPath = path.join("reports")
+const path = require("path");
+const reporter = require("cucumber-html-reporter");
+
+const reportPath = path.join("reports");
 
 /**
  * Report Related Methods
  */
 class Report {
-    /**
+	/**
      * Generate report
      * @param {boolean} launchReport
      */
-    static generate(launchReport=true) {
-        let options = {
-                theme: 'bootstrap',
-                jsonFile: reportPath+'/cucumber_report.json',
-                output: reportPath+'/cucumber_report.html',
-                reportSuiteAsScenarios: true,
-                launchReport: launchReport
-            };
-     
-        reporter.generate(options);
-    }
-};
+	static generate(launchReport = true) {
+		const options = {
+			theme: "bootstrap",
+			jsonFile: `${reportPath}/cucumber_report.json`,
+			output: `${reportPath}/cucumber_report.html`,
+			reportSuiteAsScenarios: true,
+			launchReport,
+		};
+
+		reporter.generate(options);
+	}
+}
 
 module.exports = Report;
