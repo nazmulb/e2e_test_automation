@@ -1,6 +1,6 @@
 {
   "name": "e2e-test-automation",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "E2E Test Automation framework using cucumberjs & selenium-webdriver",
   "scripts": {
     "test": "ENVIRONMENT=local ./node_modules/.bin/cucumber-js -p default -p progress_bar -p html_report -t 'not (@mute or @dev)'",
