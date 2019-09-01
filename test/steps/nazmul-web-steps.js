@@ -1,5 +1,5 @@
-const { Given, When, Then } = require('cucumber');
+const { When } = require("cucumber");
 
-When('I search for {string}', async function (searchQuery) {
-    await this.page.preformSearch(searchQuery);
-}); 
+When("I search for {string}", async function (searchQuery) {
+	await this.page.preformSearch(searchQuery);
+});

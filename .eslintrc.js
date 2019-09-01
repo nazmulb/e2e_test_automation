@@ -26,5 +26,6 @@ module.exports = {
     "import/no-dynamic-require": "off",
     "class-methods-use-this": "off",
     "radix": ["error", "as-needed"],
+    "func-names": "off",
   },
 };
