@@ -1,32 +1,31 @@
-const _ = require('lodash');
+const _ = require("lodash");
 
 /**
  * Page Factory Methods
  */
 class PageFactory {
-    /**
+	/**
      * Instantiate the object
      */
-    constructor(world) {
-        this.world = world;
-    }
+	constructor(world) {
+		this.world = world;
+	}
 
-    /**
+	/**
      * Factory method
      * @param {String} name - name
      */
-    create(name) {
-        const fileName = './pages/'+_.upperFirst(_.camelCase(name))+'Page.js';
-        let className;
+	create(name) {
+		const fileName = `./pages/${_.upperFirst(_.camelCase(name))}Page.js`;
+		let ClassName;
 
-        try {
-            className = require(fileName);
-            return new className(this.world);
-        } 
-        catch (error) {
-            throw new Error(className+' page not found');
-        }
-    }
+		try {
+			ClassName = require(fileName);
+			return new ClassName(this.world);
+		} catch (error) {
+			throw new Error(`${ClassName} page not found`);
+		}
+	}
 }
 
 module.exports = PageFactory;

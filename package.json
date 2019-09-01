@@ -6,6 +6,8 @@
     "test": "ENVIRONMENT=local ./node_modules/.bin/cucumber-js -p default -p progress_bar -p html_report -t 'not (@mute or @dev)'",
     "test:ci": "ENVIRONMENT=prod PLATFORM=chromeheadless ./node_modules/.bin/cucumber-js -p default -p progress_bar -p html_report -t '@smoke'",
     "generate-report": "node ./report.js",
+    "lint": "./node_modules/.bin/eslint resources report.js",
+    "lint:fix": "npm run lint -- --fix",
     "git:push": "git add . && git commit -m \"updated codes\" && git push origin master"
   },
   "repository": {
@@ -30,6 +32,9 @@
   "homepage": "https://github.com/nazmulb/e2e_test_automation#readme",
   "devDependencies": {
     "chromedriver": "^76.0.0",
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
     "geckodriver": "^1.16.0"
   },
   "dependencies": {

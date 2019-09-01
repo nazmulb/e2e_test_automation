@@ -1,137 +1,136 @@
-const Page = require('./Page');
+const Page = require("./Page");
 
 /**
  * Slot Game Page Class Methods
  */
 class SlotGamePage extends Page {
-    
-    /**
+	/**
      * Get page specific url to navigate
      * @returns {String} page url
      */
-    get url() {
-        return '/Test_Task.html';
-    }
+	get url() {
+		return "/Test_Task.html";
+	}
 
-    /**
+	/**
      * Get page elements
      * @returns {Object} page elements
      */
-    get elements() {
-        return {
-            balanceInput: '#balance-value',
-            testDataInput: '#testdata',
-            spinButton: '#spinButton',
-            winboxDiv: '#winbox'
-        };
-    }
+	get elements() {
+		return {
+			balanceInput: "#balance-value",
+			testDataInput: "#testdata",
+			spinButton: "#spinButton",
+			winboxDiv: "#winbox",
+		};
+	}
 
-    /**
+	/**
      * Set the balance
      * @param {Number} value
      */
-    async setBalance(value) {
-        if(this.world.debug) console.log('setBalance');
+	async setBalance(value) {
+		if (this.world.debug) console.log("setBalance");
 
-        const balanceInput = this.elements.balanceInput;
+		const { balanceInput } = this.elements;
 
-        await this.world.helper.waitFor(balanceInput);
-        const input = await this.world.helper.findElement(balanceInput);
+		await this.world.helper.waitFor(balanceInput);
+		const input = await this.world.helper.findElement(balanceInput);
 
-        await input.clear();
-        await input.sendKeys(value);
-        await this.world.sleep(100);
-    }
+		await input.clear();
+		await input.sendKeys(value);
+		await this.world.sleep(100);
+	}
 
 
-    /**
+	/**
      * Set test data
      * @param {Number} value
      */
-    async setTestData(value) {
-        if(this.world.debug) console.log('setTestData');
+	async setTestData(value) {
+		if (this.world.debug) console.log("setTestData");
 
-        const testDataInput = this.elements.testDataInput;
+		const { testDataInput } = this.elements;
 
-        await this.world.helper.waitFor(testDataInput);
-        const input = await this.world.helper.findElement(testDataInput);
+		await this.world.helper.waitFor(testDataInput);
+		const input = await this.world.helper.findElement(testDataInput);
 
-        await input.clear();
-        await input.sendKeys(value);
-        await this.world.sleep(100);
-    }
+		await input.clear();
+		await input.sendKeys(value);
+		await this.world.sleep(100);
+	}
 
-    /**
+	/**
      * Click the Spin button
      */
-    async clickSpinButton(searchQuery) {
-        if(this.world.debug) console.log('clickSpinButton');
+	async clickSpinButton() {
+		if (this.world.debug) console.log("clickSpinButton");
 
-        const spinButton = this.elements.spinButton;
+		const { spinButton } = this.elements;
 
-        await this.world.helper.waitFor(spinButton);
-        const el = await this.world.helper.findElement(spinButton);
+		await this.world.helper.waitFor(spinButton);
+		const el = await this.world.helper.findElement(spinButton);
 
-        await el.click();
-        await this.world.sleep(100);
-    }
+		await el.click();
+		await this.world.sleep(100);
+	}
 
-    /**
+	/**
      * Check the balance
      * @param {Number} expectedValue
      */
-    async balanceEquals(expectedValue) {
-        if(this.world.debug) console.log('balanceEquals');
+	async balanceEquals(expectedValue) {
+		if (this.world.debug) console.log("balanceEquals");
 
-        const balanceInput = this.elements.balanceInput;
-        const actualValue = await this.world.helper.getElementAttribute(balanceInput, 'value');
+		const { balanceInput } = this.elements;
+		const actualValue = await this.world.helper.getElementAttribute(balanceInput, "value");
 
-        this.world.expect(parseInt(actualValue)).to.equal(expectedValue);
-        await this.world.sleep(100);
-    }
+		this.world.expect(parseInt(actualValue)).to.equal(expectedValue);
+		await this.world.sleep(100);
+	}
 
-    /**
+	/**
      * Check the Spin button is disabled or not?
      */
-    async isSpinButtonDisabled() {
-        if(this.world.debug) console.log('isSpinButtonDisabled');
+	async isSpinButtonDisabled() {
+		if (this.world.debug) console.log("isSpinButtonDisabled");
 
-        const spinButton = this.elements.spinButton;
+		const { spinButton } = this.elements;
 
-        const actualValue = await this.world.helper.isEnabled(spinButton);
-        if(this.world.debug) console.log(actualValue);
+		const actualValue = await this.world.helper.isEnabled(spinButton);
+		if (this.world.debug) console.log(actualValue);
 
-        this.world.expect(actualValue).to.equal(false);
-        await this.world.sleep(100);
-    }
+		this.world.expect(actualValue).to.equal(false);
+		await this.world.sleep(100);
+	}
 
-    /**
+	/**
      * Check the win coins
      * @param {Number} coins
      */
-    async checkWinCoins(coins) {
-        if(this.world.debug) console.log('checkWinCoins');
+	async checkWinCoins(coins) {
+		if (this.world.debug) console.log("checkWinCoins");
 
-        let expectedValue = false;
-        const winboxDiv = this.elements.winboxDiv;
+		let expectedValue = false;
+		const { winboxDiv } = this.elements;
 
-        let actualValue = await this.world.helper.isDisplayed(winboxDiv);
-        if(this.world.debug) console.log(actualValue);
-        
-        if(parseInt(coins)>0) expectedValue = true;
+		let actualValue = await this.world.helper.isDisplayed(winboxDiv);
+		if (this.world.debug) console.log(actualValue);
 
-        this.world.expect(actualValue).to.equal(expectedValue);
+		if (parseInt(coins) > 0) expectedValue = true;
 
-        if(expectedValue) {
-            await this.world.sleep(1000);
+		this.world.expect(actualValue).to.equal(expectedValue);
 
-            expectedValue = "Win "+coins+" coins";
-            actualValue = await this.world.helper.getElementText(winboxDiv);
-            if(this.world.debug) console.log(actualValue);
+		if (expectedValue) {
+			await this.world.sleep(1000);
 
-            this.world.expect(actualValue).to.equal(expectedValue);
-        }
-    }
+			expectedValue = `Win ${coins} coins`;
+			actualValue = await this.world.helper.getElementText(winboxDiv);
+			if (this.world.debug) console.log(actualValue);
+
+			this.world.expect(actualValue).to.equal(expectedValue);
+		}
+	}
 }
 
 module.exports = SlotGamePage;
