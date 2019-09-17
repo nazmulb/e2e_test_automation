@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/nazmulb/e2e_test_automation.svg?style=svg)](https://circleci.com/gh/nazmulb/e2e_test_automation)
+
 # E2E Test Automation Framework
 
 ### Overview:
