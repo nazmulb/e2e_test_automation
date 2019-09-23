@@ -1,6 +1,9 @@
-[![CircleCI](https://circleci.com/gh/nazmulb/e2e_test_automation.svg?style=svg)](https://circleci.com/gh/nazmulb/e2e_test_automation)
+# E2E Test Automation Framework 
 
-# E2E Test Automation Framework
+[![CircleCI Build Status](https://badgen.net/circleci/github/nazmulb/e2e_test_automation)](https://circleci.com/gh/nazmulb/e2e_test_automation)
+[![Last commit](https://badgen.net/github/last-commit/nazmulb/e2e_test_automation)](https://github.com/nazmulb/e2e_test_automation)
+
+This is an e2e test automation framework using using Cucumber and Selenium.
 
 ### Overview:
 
