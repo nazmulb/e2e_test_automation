@@ -53,6 +53,6 @@ or
 npm test
 ```
 
-### Test report:
+### Test Report:
 
 <img alt="Report" src="https://raw.githubusercontent.com/nazmulb/cucumber/master/images/report.png" width="900px" />
