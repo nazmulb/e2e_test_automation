@@ -40,7 +40,7 @@ class Helper {
 	getAppUrlForEnv(env) {
 		switch (env.toLowerCase()) {
 		case "local":
-			return "file:///Volumes/MyComputer/projects/htdocs/e2e_test_automation/";
+			return "https://nazmulb.wordpress.com";
 		case "prod":
 			return "https://nazmulb.wordpress.com";
 		default:
