@@ -60,6 +60,6 @@ npm test
 
 ### CI/CD using Circle CI:
 
-<img alt="CI/CD using Circle CI" src="https://raw.githubusercontent.com/nazmulb/cucumber/master/images/circleci1.png" width="900px" />
+<img alt="CI/CD using Circle CI" src="https://raw.githubusercontent.com/nazmulb/e2e_test_automation/master/images/circleci1.png" width="900px" />
 
-<img alt="CI/CD using Circle CI" src="https://raw.githubusercontent.com/nazmulb/cucumber/master/images/circleci2.png" width="900px" />
+<img alt="CI/CD using Circle CI" src="https://raw.githubusercontent.com/nazmulb/e2e_test_automation/master/images/circleci2.png" width="900px" />
