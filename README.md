@@ -57,3 +57,9 @@ npm test
 ### Test Report:
 
 <img alt="Report" src="https://raw.githubusercontent.com/nazmulb/cucumber/master/images/report.png" width="900px" />
+
+### CI/CD using Circle CI:
+
+<img alt="CI/CD using Circle CI" src="https://raw.githubusercontent.com/nazmulb/cucumber/master/images/circleci1.png" width="900px" />
+
+<img alt="CI/CD using Circle CI" src="https://raw.githubusercontent.com/nazmulb/cucumber/master/images/circleci2.png" width="900px" />
