@@ -40,11 +40,11 @@ class Helper {
 	getAppUrlForEnv(env) {
 		switch (env.toLowerCase()) {
 		case "local":
-			return "https://nazmulb.wordpress.com";
+			return "https://www.ab-in-den-urlaub.de";
 		case "prod":
-			return "https://nazmulb.wordpress.com";
+			return "https://www.ab-in-den-urlaub.de";
 		default:
-			return "https://nazmulb.wordpress.com";
+			return "https://www.ab-in-den-urlaub.de";
 		}
 	}
 
