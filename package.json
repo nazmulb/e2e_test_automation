@@ -9,7 +9,7 @@
     "lint": "./node_modules/.bin/eslint resources test report.js cucumber.js",
     "lint:fix": "npm run lint -- --fix",
     "docs": "rm -rf docs && jsdoc -c jsdoc.json -d docs",
-    "git:push": "git add . && git commit -m \"updated codes\" && git push"
+    "git:push": "git add . && git commit -m \"updated codes\" && git push origin invia"
   },
   "pre-commit": [
     "lint"
