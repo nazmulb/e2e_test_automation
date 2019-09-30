@@ -11,10 +11,11 @@ This is an e2e test automation framework using using Cucumber and Selenium.
 
 We need the following to have a browser based e2e testing using Cucumber JS:
 
-- <a href="https://github.com/cucumber/cucumber-js">Cucumber JS</a>
-- <a href="https://www.npmjs.com/package/chai">Chai</a>
-- <a href="https://docs.seleniumhq.org/docs/03_webdriver.jsp#setting-up-a-selenium-webdriver-project">Selenium-Webdriver</a>
-- <a href="https://www.npmjs.com/package/cucumber-html-reporter">Cucumber-Html-Reporter</a>
+- [Cucumber JS](https://github.com/nazmulb/cucumber) [Video Workshop](https://www.youtube.com/playlist?list=PLU0B5opOZ_Dv6t8iKhE4GRkjk9CKJAnJ9)
+- [Chai](https://www.npmjs.com/package/chai)
+- [Selenium-Webdriver](https://docs.seleniumhq.org/docs/03_webdriver.jsp#setting-up-a-selenium-webdriver-project)
+- [Cucumber-Html-Reporter](https://www.npmjs.com/package/chai)
+- [Circle CI](https://github.com/nazmulb/circleci) [Video Workshop](https://www.youtube.com/playlist?list=PLU0B5opOZ_DsP7m6mFCl3R9H_NvdfVWNF)
 
 ### Quick Reference Guide:
 
