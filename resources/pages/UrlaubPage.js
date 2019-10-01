@@ -121,6 +121,9 @@ class UrlaubPage extends Page {
 
 		await this.world.helper.waitFor(selectDateTd);
 		const el = await this.world.helper.findElement(selectDateTd);
+		// if (input === "end") {
+		await this.world.helper.scrollToElement(el);
+		// }
 		await el.click();
 		await this.world.sleep(50);
 	}
@@ -147,13 +150,12 @@ class UrlaubPage extends Page {
 				await this.world.helper.waitFor(startDateDiv);
 				const el = await this.world.helper.findElement(startDateDiv);
 				await el.click();
-
 				await this.setDate(sDate, nextStartMonthSpan, selectedStartMonthYearSpan, "start");
 
 				// Select return date
 				await this.setDate(eDate, nextReturnMonthSpan, selectedReturnMonthYearSpan, "end");
 
-				await this.world.sleep(2000);
+				await this.world.sleep(100);
 			} else {
 				throw new Error("Start date shouldn't be past from the return date");
 			}
@@ -192,6 +194,7 @@ class UrlaubPage extends Page {
 
 		await this.world.helper.waitFor(searchOffersBtn);
 		const el = await this.world.helper.findElement(searchOffersBtn);
+		await this.world.helper.scrollToElement(el);
 		await el.click();
 		await this.world.sleep(2000);
 	}
