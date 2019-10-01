@@ -121,9 +121,7 @@ class UrlaubPage extends Page {
 
 		await this.world.helper.waitFor(selectDateTd);
 		const el = await this.world.helper.findElement(selectDateTd);
-		// if (input === "end") {
 		await this.world.helper.scrollToElement(el);
-		// }
 		await el.click();
 		await this.world.sleep(50);
 	}
