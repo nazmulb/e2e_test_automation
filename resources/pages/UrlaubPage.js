@@ -189,12 +189,15 @@ class UrlaubPage extends Page {
      */
 	async setTraveller(noOfAdults, noOfChildren = 0) {
 		if (this.world.debug) console.log("setTraveller");
+
+		const adults = parseInt(noOfAdults);
+		const children = parseInt(noOfChildren);
 		let el;
 		const {
 			travellerSummaryInput, travellerLayerDiv, adultCountDiv, adultPlusButton, adultMinusButton, travellerApplyButton,
 		} = this.elements;
 
-		if (noOfAdults > 0) {
+		if (adults > 0 && adults <= 4) {
 			await this.world.helper.waitFor(travellerSummaryInput);
 			el = await this.world.helper.findElement(travellerSummaryInput);
 			await el.click();
@@ -204,14 +207,14 @@ class UrlaubPage extends Page {
 
 			if (this.world.debug) console.log(`${adultCount}`);
 
-			while (noOfAdults > adultCount) {
+			while (adults > adultCount) {
 				await this.setAdults(adultPlusButton);
 				adultCount = await this.world.helper.getElementText(adultCountDiv);
 
 				if (this.world.debug) console.log(`${adultCount}`);
 			}
 
-			while (noOfAdults < adultCount) {
+			while (adults < adultCount) {
 				await this.setAdults(adultMinusButton);
 				adultCount = await this.world.helper.getElementText(adultCountDiv);
 
@@ -225,10 +228,10 @@ class UrlaubPage extends Page {
 
 			await this.world.sleep(500);
 		} else {
-			throw new Error("No of adults should be greater than 0");
+			throw new Error("No of adults should be within 1 to 4");
 		}
 
-		if (noOfChildren > 0) {
+		if (children > 0) {
 			// TODO: Do nothing now :)
 		}
 	}
