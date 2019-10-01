@@ -16,8 +16,9 @@ class UrlaubPage extends Page {
 			startDateDiv: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-input-wrapper.datepicker-input-wrapper-start > div",
 			nextStartMonthSpan: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.start-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
 			selectedStartMonthYearSpan: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.start-input > div.datepicker-header > div > span[class=\"\"]",
-			selectDateTd: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.start-input > div.datepicker-wrapper > div > div",
+			selectDateTd: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div",
 			nextReturnMonthSpan: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.end-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
+			selectedReturnMonthYearSpan: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.end-input > div.datepicker-header > div > span[class=\"\"]",
 			searchOffersBtn: "#submit",
 		};
 	}
@@ -25,12 +26,13 @@ class UrlaubPage extends Page {
 	/**
      * Generate Date Selector
 	 * @param {Object} dateObject - Date object
+	 * @param {String} input - start / end
 	 * @returns {String} - css selector
      */
-	generateDateSelector(dateObject) {
+	generateDateSelector(dateObject, input) {
 		const { selectDateTd } = this.elements;
 
-		return `${selectDateTd} > div.month.month-${dateObject.getMonth()}.year-${dateObject.getFullYear()} > table > tbody > tr > td.day.day-${dateObject.getDate()}`;
+		return `${selectDateTd} > div.datepicker-layer.${input}-input > div.datepicker-wrapper > div > div > div.month.month-${dateObject.getMonth()}.year-${dateObject.getFullYear()} > table > tbody > tr > td.day.day-${dateObject.getDate()}`;
 	}
 
 	/**
@@ -89,8 +91,9 @@ class UrlaubPage extends Page {
 	 * @param {Object} dateObject - Date object
 	 * @param {String} locatorNextMonth - css or xpath selector element for next month
 	 * @param {String} locatorSelectedMonthYear - css or xpath selector element for selected month year
+	 * @param {String} input - start / end
      */
-	async setDate(dateObject, locatorNextMonth, locatorSelectedMonthYear) {
+	async setDate(dateObject, locatorNextMonth, locatorSelectedMonthYear, input) {
 		await this.world.helper.waitFor(locatorNextMonth);
 		let { selectedMonth, selectedYear } = await this.getSelectedMonthYear(locatorSelectedMonthYear);
 
@@ -113,7 +116,7 @@ class UrlaubPage extends Page {
 			console.log(`${selectedMonth}/${selectedYear}`);
 		}
 
-		const selectDateTd = this.generateDateSelector(dateObject);
+		const selectDateTd = this.generateDateSelector(dateObject, input);
 		console.log(selectDateTd);
 
 		await this.world.helper.waitFor(selectDateTd);
@@ -137,7 +140,7 @@ class UrlaubPage extends Page {
 		if (sDate > today) {
 			if (eDate >= sDate) {
 				const {
-					startDateDiv, nextStartMonthSpan, selectedStartMonthYearSpan,
+					startDateDiv, nextStartMonthSpan, selectedStartMonthYearSpan, nextReturnMonthSpan, selectedReturnMonthYearSpan,
 				} = this.elements;
 
 				// Select start date
@@ -145,10 +148,10 @@ class UrlaubPage extends Page {
 				const el = await this.world.helper.findElement(startDateDiv);
 				await el.click();
 
-				await this.setDate(sDate, nextStartMonthSpan, selectedStartMonthYearSpan);
+				await this.setDate(sDate, nextStartMonthSpan, selectedStartMonthYearSpan, "start");
 
 				// Select return date
-				// TODO:
+				await this.setDate(eDate, nextReturnMonthSpan, selectedReturnMonthYearSpan, "end");
 
 				await this.world.sleep(2000);
 			} else {
