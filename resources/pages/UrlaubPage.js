@@ -26,6 +26,7 @@ class UrlaubPage extends Page {
 			adultMinusButton: "#adult > button.minusButton",
 			travellerApplyButton: "#travellerLayer > div.submit > button",
 			searchOffersBtn: "#submit",
+			HotelSelectionPageFirstResMediaDiv: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.media.media-fullscreen.js-media.js-showFullscreenSlider.media-loaded",
 		};
 	}
 
@@ -262,13 +263,16 @@ class UrlaubPage extends Page {
      */
 	async searchOffers() {
 		if (this.world.debug) console.log("searchOffers");
-		const { searchOffersBtn } = this.elements;
+
+		const { searchOffersBtn, HotelSelectionPageFirstResMediaDiv } = this.elements;
 
 		await this.world.helper.waitFor(searchOffersBtn);
 		const el = await this.world.helper.findElement(searchOffersBtn);
 		await this.world.helper.scrollToElement(el);
 		await el.click();
-		await this.world.sleep(2000);
+
+		await this.world.helper.waitFor(HotelSelectionPageFirstResMediaDiv);
+		await this.world.sleep(1000);
 	}
 }
 

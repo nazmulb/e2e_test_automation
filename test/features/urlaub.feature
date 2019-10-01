@@ -9,4 +9,3 @@ Feature: Search offers for holiday destination from home page
     | returnDate  | 2019-11-13  |
     | noOfAdults  | 2           |
     And click Angebote suchen button
-    #Then I expect "Hotelauswahl" page should be shown
