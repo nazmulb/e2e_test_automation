@@ -16,29 +16,20 @@ class UrlaubPage extends Page {
 			startDateDiv: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-input-wrapper.datepicker-input-wrapper-start > div",
 			nextMonthDiv: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.start-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
 			selectedMonthYearSpan: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.start-input > div.datepicker-header > div > span[class=\"\"]",
+			selectDateTd: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.start-input > div.datepicker-wrapper > div > div",
 			searchOffersBtn: "#submit",
 		};
 	}
 
 	/**
-     * Get month names
-     * @returns {Object} - month names
+     * Generate Date Selector
+	 * @param {Object} - Date object
+	 * @returns {String} - css selector
      */
-	get monthNames() {
-		return {
-			1: "Januar",
-			2: "Februar",
-			3: "März",
-			4: "April",
-			5: "Mai",
-			6: "Juni",
-			7: "Juli",
-			8: "August",
-			9: "September",
-			10: "Oktober",
-			11: "November",
-			12: "Dezember",
-		};
+	generateDateSelector(dateObject) {
+		const { selectDateTd } = this.elements;
+
+		return `${selectDateTd} > div.month.month-${dateObject.getMonth()}.year-${dateObject.getFullYear()} > table > tbody > tr > td.day.day-${dateObject.getDate()}`;
 	}
 
 	/**
@@ -64,7 +55,7 @@ class UrlaubPage extends Page {
 
 	/**
      * Click Next Month
-	 * @param {string} locator - css or xpath selector element
+	 * @param {String} locator - css or xpath selector element
      */
 	async clickNextMonth(locator) {
 		if (this.world.debug) console.log("clickNextMonth");
@@ -77,7 +68,7 @@ class UrlaubPage extends Page {
 
 	/**
      * Get Selected Month and Year
-	 * @param {string} locator - css or xpath selector element
+	 * @param {String} locator - css or xpath selector element
 	 * @returns {Object} - selected month and year
      */
 	async getSelectedMonthYear(locator) {
@@ -107,9 +98,10 @@ class UrlaubPage extends Page {
 		if (sDate > today) {
 			if (eDate >= sDate) {
 				const { startDateDiv, nextMonthDiv, selectedMonthYearSpan } = this.elements;
+				let el;
 
 				await this.world.helper.waitFor(startDateDiv);
-				const el = await this.world.helper.findElement(startDateDiv);
+				el = await this.world.helper.findElement(startDateDiv);
 				await el.click();
 
 				await this.world.helper.waitFor(nextMonthDiv);
@@ -134,6 +126,13 @@ class UrlaubPage extends Page {
 
 					console.log(`${selectedMonth}/${selectedYear}`);
 				}
+
+				const selectDateTd = this.generateDateSelector(sDate);
+				console.log(selectDateTd);
+
+				await this.world.helper.waitFor(selectDateTd);
+				el = await this.world.helper.findElement(selectDateTd);
+				await el.click();
 
 				await this.world.sleep(2000);
 			} else {
