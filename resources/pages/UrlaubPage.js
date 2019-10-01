@@ -1,9 +1,9 @@
 const Page = require("./Page");
 
 /**
- * Ab In Den Urlaub Home Page Class Methods
+ * Ab In Den Urlaub Page Class Methods
  */
-class HomeUrlaubPage extends Page {
+class UrlaubPage extends Page {
 	/**
      * Get page elements
      * @returns {Object} page elements
@@ -52,4 +52,4 @@ class HomeUrlaubPage extends Page {
 	}
 }
 
-module.exports = HomeUrlaubPage;
+module.exports = UrlaubPage;
