@@ -1,11 +1,7 @@
 const { When } = require("cucumber");
 
-When("I select {string} as destination", async function (destination) {
-	await this.page.selectDestination(destination);
-});
-
-When("set dates from {string} to {string}", async function (startDate, returnDate) {
-	await this.page.setDateRange(startDate, returnDate);
+When("I fill the search offer form", async function (table) {
+	await this.page.fillSearchOfferForm(table.rowsHash());
 });
 
 When("click Angebote suchen button", async function () {

@@ -143,6 +143,27 @@ class UrlaubPage extends Page {
 		}
 	}
 
+
+	/**
+     * Fill Search Offer Form
+     * @param {Object} data - form data
+     */
+	async fillSearchOfferForm(data) {
+		if (this.world.debug) console.log("fillSearchOfferForm");
+
+		if (data.destination) {
+			await this.selectDestination(data.destination);
+		}
+
+		if (data.startDate && data.returnDate) {
+			await this.setDateRange(data.startDate, data.returnDate);
+		}
+
+		if (data.noOfAdults) {
+			// TODO:
+		}
+	}
+
 	/**
      * Search Offers
      */
