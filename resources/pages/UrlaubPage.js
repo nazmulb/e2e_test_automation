@@ -19,6 +19,12 @@ class UrlaubPage extends Page {
 			selectDateTd: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div",
 			nextReturnMonthSpan: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.end-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
 			selectedReturnMonthYearSpan: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.end-input > div.datepicker-header > div > span[class=\"\"]",
+			travellerSummaryInput: "#travellerSummary",
+			travellerLayerDiv: "div[id=\"travellerLayer\"][style=\"\"]",
+			adultCountDiv: "#adult > div",
+			adultPlusButton: "#adult > button.plusButton",
+			adultMinusButton: "#adult > button.minusButton",
+			travellerApplyButton: "#travellerLayer > div.submit > button",
 			searchOffersBtn: "#submit",
 		};
 	}
@@ -97,7 +103,7 @@ class UrlaubPage extends Page {
 		await this.world.helper.waitFor(locatorNextMonth);
 		let { selectedMonth, selectedYear } = await this.getSelectedMonthYear(locatorSelectedMonthYear);
 
-		console.log(`${selectedMonth}/${selectedYear}`);
+		if (this.world.debug) console.log(`${selectedMonth}/${selectedYear}`);
 
 		while (dateObject.getFullYear() > selectedYear) {
 			await this.clickNextMonth(locatorNextMonth);
@@ -105,7 +111,7 @@ class UrlaubPage extends Page {
 			selectedMonth = selected.selectedMonth;
 			selectedYear = selected.selectedYear;
 
-			console.log(`${selectedMonth}/${selectedYear}`);
+			if (this.world.debug) console.log(`${selectedMonth}/${selectedYear}`);
 		}
 
 		while (dateObject.getMonth() > selectedMonth) {
@@ -113,11 +119,11 @@ class UrlaubPage extends Page {
 			const selected = await this.getSelectedMonthYear(locatorSelectedMonthYear);
 			selectedMonth = selected.selectedMonth;
 
-			console.log(`${selectedMonth}/${selectedYear}`);
+			if (this.world.debug) console.log(`${selectedMonth}/${selectedYear}`);
 		}
 
 		const selectDateTd = this.generateDateSelector(dateObject, input);
-		console.log(selectDateTd);
+		if (this.world.debug) console.log(selectDateTd);
 
 		await this.world.helper.waitFor(selectDateTd);
 		const el = await this.world.helper.findElement(selectDateTd);
@@ -162,6 +168,71 @@ class UrlaubPage extends Page {
 		}
 	}
 
+	/**
+     * Set Adults
+	 * @param {String} locator - css or xpath selector element
+     */
+	async setAdults(locator) {
+		if (this.world.debug) console.log("setAdults");
+
+		await this.world.sleep(50);
+		const el = await this.world.helper.findElement(locator);
+		await this.world.helper.scrollToElement(el);
+		await el.click();
+		await this.world.sleep(50);
+	}
+
+	/**
+     * Set Traveller
+     * @param {Number} noOfAdults - # of adults
+	 * @param {Number} noOfChildren - # of children
+     */
+	async setTraveller(noOfAdults, noOfChildren = 0) {
+		if (this.world.debug) console.log("setTraveller");
+		let el;
+		const {
+			travellerSummaryInput, travellerLayerDiv, adultCountDiv, adultPlusButton, adultMinusButton, travellerApplyButton,
+		} = this.elements;
+
+		if (noOfAdults > 0) {
+			await this.world.helper.waitFor(travellerSummaryInput);
+			el = await this.world.helper.findElement(travellerSummaryInput);
+			await el.click();
+
+			await this.world.helper.waitFor(travellerLayerDiv);
+			let adultCount = await this.world.helper.getElementText(adultCountDiv);
+
+			if (this.world.debug) console.log(`${adultCount}`);
+
+			while (noOfAdults > adultCount) {
+				await this.setAdults(adultPlusButton);
+				adultCount = await this.world.helper.getElementText(adultCountDiv);
+
+				if (this.world.debug) console.log(`${adultCount}`);
+			}
+
+			while (noOfAdults < adultCount) {
+				await this.setAdults(adultMinusButton);
+				adultCount = await this.world.helper.getElementText(adultCountDiv);
+
+				if (this.world.debug) console.log(`${adultCount}`);
+			}
+
+			await this.world.sleep(100);
+			await this.world.helper.waitFor(travellerApplyButton);
+			el = await this.world.helper.findElement(travellerApplyButton);
+			await el.click();
+
+			await this.world.sleep(500);
+		} else {
+			throw new Error("No of adults should be greater than 0");
+		}
+
+		if (noOfChildren > 0) {
+			// TODO: Do nothing now :)
+		}
+	}
+
 
 	/**
      * Fill Search Offer Form
@@ -179,7 +250,7 @@ class UrlaubPage extends Page {
 		}
 
 		if (data.noOfAdults) {
-			// TODO:
+			await this.setTraveller(data.noOfAdults);
 		}
 	}
 
