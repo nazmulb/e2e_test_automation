@@ -407,7 +407,6 @@ class UrlaubPage extends Page {
 			if (priceElements) {
 				actualSort = await Promise.all(priceElements.map(async function (priceElement) {
 					const priceText = await priceElement.getText();
-					console.log(priceText);
 					const price = parseInt(priceText.match(/([0-9])+/g).join(""));
 					return price;
 				}));
