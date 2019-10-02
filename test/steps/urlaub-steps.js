@@ -19,3 +19,25 @@ Then("I expect results should be sorted by {string}", async function (expectedSo
 When("I select the most expensive hotel", async function () {
 	await this.page.selectMostExpensiveHotel();
 });
+
+When("select some options to find best fit", async function (table) {
+	await this.page.findBestFit(table.rowsHash());
+});
+
+Then("I count how many options with direct flights", async function () {
+	// TODO:
+});
+
+Then("expect flight time of first result falls within desired time range", async function () {
+	// TODO:
+});
+
+When("I select the first offer and click {string} button", async function (buttonName) {
+	if (buttonName) {
+		// TODO:
+	}
+});
+
+Then("I expect the hotel name is same as the one I selected earlier", async function () {
+	// TODO:
+});

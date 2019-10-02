@@ -53,6 +53,8 @@ class UrlaubPage extends Page {
 	 * @returns {String} - css selector
      */
 	generateDateSelector(dateTd, dateObject, input) {
+		if (this.world.debug) console.log("generateDateSelector");
+
 		return `${dateTd} > div.datepicker-layer.${input}-input > div.datepicker-wrapper > div > div > div.month.month-${dateObject.getMonth()}.year-${dateObject.getFullYear()} > table > tbody > tr > td.day.day-${dateObject.getDate()}`;
 	}
 
@@ -143,6 +145,9 @@ class UrlaubPage extends Page {
 	 * @param {String} pageName - name of the page
      */
 	async setDate(dateObject, locatorNextMonth, locatorSelectedMonthYear, input, pageName = "") {
+		if (this.world.debug) console.log("setDate");
+
+		await this.world.sleep(50);
 		await this.world.helper.waitFor(locatorNextMonth);
 		let { selectedMonth, selectedYear } = await this.getSelectedMonthYear(locatorSelectedMonthYear);
 
@@ -386,7 +391,7 @@ class UrlaubPage extends Page {
 			await this.world.sleep(1000);
 		}
 
-		await this.world.sleep(1000);
+		await this.world.sleep(2000);
 	}
 
 
@@ -416,6 +421,7 @@ class UrlaubPage extends Page {
 			expectedSort.sort(function (a, b) { return b - a; });
 
 			this.world.expect(actualSort[0]).to.equal(expectedSort[0]);
+			await this.world.sleep(100);
 		}
 	}
 
@@ -430,6 +436,37 @@ class UrlaubPage extends Page {
 		await this.clickButton(aboutOffersDiv, "", true, hotelListHeadSection);
 		await this.world.switchTab(1);
 		await this.world.helper.waitFor(hotelDetailsDepartureTimeDiv);
+
+		await this.world.sleep(2000);
+	}
+
+
+	/**
+     * Find Best Fit
+     * @param {Object} data - form data
+     */
+	async findBestFit(data) {
+		if (this.world.debug) console.log("findBestFit");
+
+		if (data.departureTime) {
+			// TODO:
+		}
+
+		if (data.arrivalTime) {
+			// TODO:
+		}
+
+		if (data.returnDepartureTime) {
+			// TODO:
+		}
+
+		if (data.returnArrivalTime) {
+			// TODO:
+		}
+
+		if (data.dateOfArrival) {
+			// TODO:
+		}
 
 		await this.world.sleep(1000);
 	}
