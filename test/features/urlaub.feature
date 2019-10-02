@@ -14,7 +14,7 @@ Feature: Search offers for holiday destination from home page
     | startDate   | 2019-11-13              |
     | returnDate  | 2019-11-20              |
     | clickButton  | Suche anpassen         |
-    | starRating  | ab 4 Sternen            |
+    | starRating  | 4                       |
     | customerReview  | Bewertung Exzellent |
     | sortBy  | Höchster Preis              |
     Then I expect results should be sorted by "Höchster Preis"

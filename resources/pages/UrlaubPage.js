@@ -35,6 +35,7 @@ class UrlaubPage extends Page {
 			nextReturnMonthHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.end-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
 			selectedReturnMonthYearHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.end-input > div.datepicker-header > div > span[class=\"\"]",
 			directFlightHotelInput: "#directFlight",
+			starRatingCatInput: "#optCategory{txt}",
 		};
 	}
 
@@ -47,6 +48,26 @@ class UrlaubPage extends Page {
      */
 	generateDateSelector(dateTd, dateObject, input) {
 		return `${dateTd} > div.datepicker-layer.${input}-input > div.datepicker-wrapper > div > div > div.month.month-${dateObject.getMonth()}.year-${dateObject.getFullYear()} > table > tbody > tr > td.day.day-${dateObject.getDate()}`;
+	}
+
+	/**
+     * Click Button
+	 * @param {String} buttonToClick - css or xpath selector element for button
+	 * @param {String} waitForElement - css or xpath selector element for wait
+	 * @param {String} scrollToElement - css or xpath selector element for scroll
+     */
+	async clickButton(buttonToClick, waitForElement, scrollToElement = "") {
+		if (this.world.debug) console.log("clickButton");
+
+		await this.world.helper.waitFor(buttonToClick);
+		const el = await this.world.helper.findElement(buttonToClick);
+
+		const element = (scrollToElement === "") ? el : await this.world.helper.findElement(scrollToElement);
+		await this.world.helper.scrollToElement(element);
+		await el.click();
+
+		await this.world.helper.waitFor(waitForElement);
+		await this.world.sleep(1000);
 	}
 
 	/**
@@ -291,26 +312,6 @@ class UrlaubPage extends Page {
 	}
 
 	/**
-     * Click Button
-	 * @param {String} buttonToClick - css or xpath selector element for button
-	 * @param {String} waitForElement - css or xpath selector element for wait
-	 * @param {String} scrollToElement - css or xpath selector element for scroll
-     */
-	async clickButton(buttonToClick, waitForElement, scrollToElement = "") {
-		if (this.world.debug) console.log("clickButton");
-
-		await this.world.helper.waitFor(buttonToClick);
-		const el = await this.world.helper.findElement(buttonToClick);
-
-		const element = (scrollToElement === "") ? el : await this.world.helper.findElement(scrollToElement);
-		await this.world.helper.scrollToElement(element);
-		await el.click();
-
-		await this.world.helper.waitFor(waitForElement);
-		await this.world.sleep(1000);
-	}
-
-	/**
      * Check Page Name
 	 * @param {String} expectedTitle - name of the page
      */
@@ -332,6 +333,8 @@ class UrlaubPage extends Page {
 	async findBestHotel(data) {
 		if (this.world.debug) console.log("findBestHotel");
 
+		const { hotelSelectionPageFirstResMediaDiv, directFlightHotelInput } = this.elements;
+
 		if (data.startDate && data.returnDate) {
 			const {
 				startDateHotelDiv, nextStartMonthHotelSpan, selectedStartMonthYearHotelSpan, nextReturnMonthHotelSpan, selectedReturnMonthYearHotelSpan,
@@ -341,9 +344,17 @@ class UrlaubPage extends Page {
 		}
 
 		if (data.clickButton) {
-			const { searchOffersBtn, hotelSelectionPageFirstResMediaDiv, directFlightHotelInput } = this.elements;
+			const { searchOffersBtn } = this.elements;
 
 			await this.clickButton(searchOffersBtn, hotelSelectionPageFirstResMediaDiv, directFlightHotelInput);
+		}
+
+		if (data.starRating) {
+			const { starRatingCatInput } = this.elements;
+			const number = (data.starRating === "beliebig") ? -1 : Math.round(parseInt(data.starRating) / 2);
+			const starRateInput = starRatingCatInput.replace("{txt}", number);
+
+			await this.clickButton(starRateInput, hotelSelectionPageFirstResMediaDiv, directFlightHotelInput);
 		}
 
 		await this.world.sleep(2000);
