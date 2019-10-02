@@ -37,6 +37,7 @@ class UrlaubPage extends Page {
 			directFlightHotelInput: "#directFlight",
 			starRatingCatInput: "#optCategory{txt}",
 			customerReviewSvg: "#hotelFilter > div.filter.filter-kundenbewertung > label:nth-child({txt}) > svg",
+			hotelsortingSelect: "#hotelsorting > option[value=\"{txt}\"]",
 		};
 	}
 
@@ -363,15 +364,22 @@ class UrlaubPage extends Page {
 			await this.world.sleep(1000);
 		}
 
-
 		if (data.customerReview) {
 			const { customerReviewSvg } = this.elements;
 			const custReviewSvg = customerReviewSvg.replace("{txt}", data.customerReview);
 
 			await this.clickButton(custReviewSvg, hotelSelectionPageFirstResMediaDiv, true, directFlightHotelInput);
+			await this.world.sleep(1000);
 		}
 
-		await this.world.sleep(2000);
+		if (data.sortBy) {
+			const { hotelsortingSelect } = this.elements;
+			const sortingSelect = hotelsortingSelect.replace("{txt}", data.sortBy.replace(" ", "_"));
+
+			await this.clickButton(sortingSelect, hotelSelectionPageFirstResMediaDiv);
+		}
+
+		await this.world.sleep(10000);
 	}
 
 

@@ -16,5 +16,5 @@ Feature: Search offers for holiday destination from home page
     | clickButton     | Suche anpassen |
     | starRating      | 4              |
     | customerReview  | 5              |
-    | sortBy          | Höchster Preis |
+    | sortBy          | price desc     |
     Then I expect results should be sorted by "Höchster Preis"
