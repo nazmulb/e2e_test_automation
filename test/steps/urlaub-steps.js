@@ -15,3 +15,7 @@ When("I change selections and find the best hotel", async function (table) {
 Then("I expect results should be sorted by {string}", async function (expectedSortedBy) {
 	await this.page.verifySorted(expectedSortedBy);
 });
+
+When("I select the most expensive hotel", async function () {
+	await this.page.selectMostExpensiveHotel();
+});

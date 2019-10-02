@@ -27,7 +27,7 @@ class UrlaubPage extends Page {
 			travellerApplyButton: "#travellerLayer > div.submit > button",
 			searchOffersBtn: "#submit",
 			hotelSelectionPageFirstResMediaDiv: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.media.media-fullscreen.js-media.js-showFullscreenSlider.media-loaded",
-			hotelSelectionPageNameSpan: "#bookingProcess > div > ul > li.active > span > span",
+			currentPageNameSpan: "#bookingProcess > div > ul > li.active > span > span",
 			startDateHotelDiv: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-input-wrapper.datepicker-input-wrapper-start > div",
 			nextStartMonthHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.start-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
 			selectedStartMonthYearHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.start-input > div.datepicker-header > div > span[class=\"\"]",
@@ -38,6 +38,10 @@ class UrlaubPage extends Page {
 			starRatingCatInput: "#optCategory{txt}",
 			customerReviewSvg: "#hotelFilter > div.filter.filter-kundenbewertung > label:nth-child({txt}) > svg",
 			hotelsortingSelect: "#hotelsorting > option[value=\"{txt}\"]",
+			priceBoxStrong: "#hotelList > div.skeleton-wrapper > article > div.content > div.priceBox > div > a > div > strong",
+			aboutOffersLink: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.content > div.priceBox > a > div",
+			hotelDetailsImage: "#hotel-offer-box > div > div.tab-widget-tab-content.tab-widget-tab-content-active > div > div.col-sm-8.col-md-8 > div > div.media-large > img",
+			hotelListHeadSection: "#hotelListHeadSkeleton",
 		};
 	}
 
@@ -324,10 +328,10 @@ class UrlaubPage extends Page {
 	async checkPageName(expectedTitle) {
 		if (this.world.debug) console.log("checkPageName");
 
-		const { hotelSelectionPageNameSpan } = this.elements;
+		const { currentPageNameSpan } = this.elements;
 
-		await this.world.helper.waitFor(hotelSelectionPageNameSpan);
-		let actualTitle = await this.world.helper.getElementText(hotelSelectionPageNameSpan);
+		await this.world.helper.waitFor(currentPageNameSpan);
+		let actualTitle = await this.world.helper.getElementText(currentPageNameSpan);
 		actualTitle = actualTitle.replace(". ", "");
 		this.world.expect(actualTitle).to.equal(expectedTitle);
 	}
@@ -377,9 +381,10 @@ class UrlaubPage extends Page {
 			const sortingSelect = hotelsortingSelect.replace("{txt}", data.sortBy.replace(" ", "_"));
 
 			await this.clickButton(sortingSelect, hotelSelectionPageFirstResMediaDiv);
+			await this.world.sleep(1000);
 		}
 
-		await this.world.sleep(10000);
+		await this.world.sleep(1000);
 	}
 
 
@@ -391,8 +396,43 @@ class UrlaubPage extends Page {
 		if (this.world.debug) console.log("verifySorted");
 
 		if (expectedSortedBy) {
-			// TODO:
+			const { priceBoxStrong } = this.elements;
+			let actualSort = [];
+
+			await this.world.helper.waitFor(priceBoxStrong);
+			const priceElements = await this.world.helper.findElements(priceBoxStrong);
+
+			if (priceElements) {
+				actualSort = await Promise.all(priceElements.map(async function (priceElement) {
+					const priceText = await priceElement.getText();
+					console.log(priceText);
+					const price = parseInt(priceText.match(/([0-9])+/g).join(""));
+					return price;
+				}));
+			}
+
+			const expectedSort = actualSort;
+			expectedSort.sort(function (a, b) { return b - a; });
+
+			console.dir(actualSort);
+			console.dir(expectedSort);
+
+			this.world.expect(actualSort[0]).to.equal(expectedSort[0]);
 		}
+	}
+
+
+	/**
+     * Select The Most Expensive Hotel
+     */
+	async selectMostExpensiveHotel() {
+		if (this.world.debug) console.log("selectMostExpensiveHotel");
+
+		const { aboutOffersLink, hotelDetailsImage, hotelListHeadSection } = this.elements;
+
+		await this.clickButton(aboutOffersLink, hotelDetailsImage, true, hotelListHeadSection);
+
+		await this.world.sleep(10000);
 	}
 }
 

@@ -1,7 +1,7 @@
 @urlaub
-Feature: Search offers for holiday destination from home page
+Feature: Find the best hotel and try to book
 
-  Scenario: Select holiday destination and search offers
+  Scenario: Find the best hotel
     Given I navigate to the "urlaub" page
     When I fill the search offer form
       | destination | Sizilien        |
@@ -17,4 +17,5 @@ Feature: Search offers for holiday destination from home page
     | starRating      | 4              |
     | customerReview  | 5              |
     | sortBy          | price desc     |
-    Then I expect results should be sorted by "Höchster Preis"
+    Then I expect results should be sorted by "price desc"
+    When I select the most expensive hotel

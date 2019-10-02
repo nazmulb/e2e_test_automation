@@ -87,7 +87,7 @@ class Helper {
 	}
 
 	/**
-     * To find an element on the page
+     * To find an element on the page that match the given search criteria
      * @param {string} locator - css or xpath selector element
      * @returns {WebElementPromise} an element that can be used to issue commands against the located element
      * @example
@@ -103,6 +103,25 @@ class Helper {
 		if (this.world.debug) console.log(`findElement: ${locator}`);
 
 		return this.world.driver.findElement(this.world.selenium.By[selector](locator));
+	}
+
+	/**
+     * To find all elements on the page that match the given search criteria
+     * @param {string} locator - css or xpath selector element
+     * @returns {WebElementPromise} an element that can be used to issue commands against the located element
+     * @example
+     *      helper.findElements("body");
+     */
+	async findElements(locator) {
+		if (!this.world.isBrowser) {
+			throw new Error("Tests are not running on a web browser, no web elements to wait for");
+		}
+
+		const selector = (locator.indexOf("//") === 0) ? "xpath" : "css";
+
+		if (this.world.debug) console.log(`findElements: ${locator}`);
+
+		return this.world.driver.findElements(this.world.selenium.By[selector](locator));
 	}
 
 	/**
