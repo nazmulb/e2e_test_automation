@@ -42,6 +42,9 @@ class UrlaubPage extends Page {
 			aboutOffersDiv: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.content > div.priceBox > a > div",
 			hotelDetailsDepartureTimeDiv: "#departureTimeRange > div > div:nth-child(1) > div",
 			hotelListHeadSection: "#hotelListHeadSkeleton",
+			dateOfArrivalInput: "#arrival-1573624800",
+			skeletonOffersArticle: "#skeletonOffers > section.skeleton-offers > article:nth-child(1)",
+			offerFilterDiv: "#offerFilter",
 		};
 	}
 
@@ -465,7 +468,14 @@ class UrlaubPage extends Page {
 		}
 
 		if (data.dateOfArrival) {
-			// TODO:
+			const { dateOfArrivalInput, skeletonOffersArticle, offerFilterDiv } = this.elements;
+
+			if (data.dateOfArrival === "2019-11-13") {
+				await this.clickButton(dateOfArrivalInput, skeletonOffersArticle, true, offerFilterDiv);
+				await this.world.sleep(1000);
+			} else {
+				throw new Error("Date of arrival should be 2019-11-13");
+			}
 		}
 
 		await this.world.sleep(1000);
