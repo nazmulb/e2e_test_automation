@@ -39,8 +39,8 @@ class UrlaubPage extends Page {
 			customerReviewSvg: "#hotelFilter > div.filter.filter-kundenbewertung > label:nth-child({txt}) > svg",
 			hotelsortingSelect: "#hotelsorting > option[value=\"{txt}\"]",
 			priceBoxStrong: "#hotelList > div.skeleton-wrapper > article > div.content > div.priceBox > div > a > div > strong",
-			aboutOffersLink: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.content > div.priceBox > a > div",
-			hotelDetailsImage: "#hotel-offer-box > div > div.tab-widget-tab-content.tab-widget-tab-content-active > div > div.col-sm-8.col-md-8 > div > div.media-large > img",
+			aboutOffersDiv: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.content > div.priceBox > a > div",
+			hotelDetailsDepartureTimeDiv: "#departureTimeRange > div > div:nth-child(1) > div",
 			hotelListHeadSection: "#hotelListHeadSkeleton",
 		};
 	}
@@ -63,7 +63,7 @@ class UrlaubPage extends Page {
 	 * @param {Boolean} scroll - need scroll or not
 	 * @param {String} scrollToElement - css or xpath selector element for scroll
      */
-	async clickButton(buttonToClick, waitForElement, scroll = true, scrollToElement = "") {
+	async clickButton(buttonToClick, waitForElement = "", scroll = true, scrollToElement = "") {
 		if (this.world.debug) console.log("clickButton");
 
 		await this.world.helper.waitFor(buttonToClick);
@@ -76,7 +76,10 @@ class UrlaubPage extends Page {
 
 		await el.click();
 
-		await this.world.helper.waitFor(waitForElement);
+		if (waitForElement) {
+			await this.world.helper.waitFor(waitForElement);
+		}
+
 		await this.world.sleep(1000);
 	}
 
@@ -290,7 +293,6 @@ class UrlaubPage extends Page {
 		}
 	}
 
-
 	/**
      * Fill Search Offer Form
      * @param {Object} data - form data
@@ -414,13 +416,9 @@ class UrlaubPage extends Page {
 			const expectedSort = actualSort;
 			expectedSort.sort(function (a, b) { return b - a; });
 
-			console.dir(actualSort);
-			console.dir(expectedSort);
-
 			this.world.expect(actualSort[0]).to.equal(expectedSort[0]);
 		}
 	}
-
 
 	/**
      * Select The Most Expensive Hotel
@@ -428,11 +426,13 @@ class UrlaubPage extends Page {
 	async selectMostExpensiveHotel() {
 		if (this.world.debug) console.log("selectMostExpensiveHotel");
 
-		const { aboutOffersLink, hotelDetailsImage, hotelListHeadSection } = this.elements;
+		const { aboutOffersDiv, hotelDetailsDepartureTimeDiv, hotelListHeadSection } = this.elements;
 
-		await this.clickButton(aboutOffersLink, hotelDetailsImage, true, hotelListHeadSection);
+		await this.clickButton(aboutOffersDiv, "", true, hotelListHeadSection);
+		await this.world.switchTab(1);
+		await this.world.helper.waitFor(hotelDetailsDepartureTimeDiv);
 
-		await this.world.sleep(10000);
+		await this.world.sleep(1000);
 	}
 }
 

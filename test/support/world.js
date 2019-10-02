@@ -66,6 +66,20 @@ class World {
 	}
 
 	/**
+	 * Easy switch browser tabs
+	 * @param {Number} tabNum
+	 * @return {TargetLocator}
+	 */
+	async switchTab(tabNum = "0") {
+		if (!this.isBrowser) {
+			throw new Error("Platform set to NONE, no browser no tabs");
+		}
+
+		const allWindowHandels = await this.driver.getAllWindowHandles();
+		return this.driver.switchTo().window(allWindowHandels[tabNum]);
+	}
+
+	/**
      * Sleep
      * @param {String} milliseconds - milli seconds
      * @returns {Bluebird} return promise
