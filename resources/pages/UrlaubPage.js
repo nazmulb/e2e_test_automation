@@ -26,20 +26,27 @@ class UrlaubPage extends Page {
 			adultMinusButton: "#adult > button.minusButton",
 			travellerApplyButton: "#travellerLayer > div.submit > button",
 			searchOffersBtn: "#submit",
-			HotelSelectionPageFirstResMediaDiv: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.media.media-fullscreen.js-media.js-showFullscreenSlider.media-loaded",
+			hotelSelectionPageFirstResMediaDiv: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.media.media-fullscreen.js-media.js-showFullscreenSlider.media-loaded",
+			hotelSelectionPageNameSpan: "#bookingProcess > div > ul > li.active > span > span",
+			startDateHotelDiv: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-input-wrapper.datepicker-input-wrapper-start > div",
+			nextStartMonthHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.start-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
+			selectedStartMonthYearHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.start-input > div.datepicker-header > div > span[class=\"\"]",
+			selectDateHotelTd: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div",
+			nextReturnMonthHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.end-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
+			selectedReturnMonthYearHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.end-input > div.datepicker-header > div > span[class=\"\"]",
+			directFlightHotelInput: "#directFlight",
 		};
 	}
 
 	/**
      * Generate Date Selector
+	 * @param {String} dateTd - css or xpath selector element
 	 * @param {Object} dateObject - Date object
 	 * @param {String} input - start / end
 	 * @returns {String} - css selector
      */
-	generateDateSelector(dateObject, input) {
-		const { selectDateTd } = this.elements;
-
-		return `${selectDateTd} > div.datepicker-layer.${input}-input > div.datepicker-wrapper > div > div > div.month.month-${dateObject.getMonth()}.year-${dateObject.getFullYear()} > table > tbody > tr > td.day.day-${dateObject.getDate()}`;
+	generateDateSelector(dateTd, dateObject, input) {
+		return `${dateTd} > div.datepicker-layer.${input}-input > div.datepicker-wrapper > div > div > div.month.month-${dateObject.getMonth()}.year-${dateObject.getFullYear()} > table > tbody > tr > td.day.day-${dateObject.getDate()}`;
 	}
 
 	/**
@@ -99,8 +106,9 @@ class UrlaubPage extends Page {
 	 * @param {String} locatorNextMonth - css or xpath selector element for next month
 	 * @param {String} locatorSelectedMonthYear - css or xpath selector element for selected month year
 	 * @param {String} input - start / end
+	 * @param {String} pageName - name of the page
      */
-	async setDate(dateObject, locatorNextMonth, locatorSelectedMonthYear, input) {
+	async setDate(dateObject, locatorNextMonth, locatorSelectedMonthYear, input, pageName = "") {
 		await this.world.helper.waitFor(locatorNextMonth);
 		let { selectedMonth, selectedYear } = await this.getSelectedMonthYear(locatorSelectedMonthYear);
 
@@ -123,44 +131,58 @@ class UrlaubPage extends Page {
 			if (this.world.debug) console.log(`${selectedMonth}/${selectedYear}`);
 		}
 
-		const selectDateTd = this.generateDateSelector(dateObject, input);
+		const selectorName = `selectDate${pageName}Td`;
+		const dateTd = this.elements[selectorName];
+
+		if (this.world.debug) console.log(dateTd);
+
+		const selectDateTd = this.generateDateSelector(dateTd, dateObject, input);
 		if (this.world.debug) console.log(selectDateTd);
 
 		await this.world.helper.waitFor(selectDateTd);
 		const el = await this.world.helper.findElement(selectDateTd);
-		await this.world.helper.scrollToElement(el);
+		if (!pageName) await this.world.helper.scrollToElement(el);
 		await el.click();
 		await this.world.sleep(50);
 	}
 
 	/**
      * Set Date Range
-     * @param {String} startDate - start date
-	 * @param {String} returnDate - return date
+     * @param {String} startDate
+	 * @param {String} returnDate
+	 * @param {String} locatorStartDate
+	 * @param {String} locatorNextStartMonth
+	 * @param {String} locatorSelectedStartMonthYear
+	 * @param {String} locatorNextReturnMonth
+	 * @param {String} locatorSelectedReturnMonthYear
+	 * @param {String} pageName
      */
-	async setDateRange(startDate, returnDate) {
+	async setDateRange(startDate, returnDate, locatorStartDate, locatorNextStartMonth, locatorSelectedStartMonthYear, locatorNextReturnMonth, locatorSelectedReturnMonthYear, pageName = "") {
 		if (this.world.debug) console.log("setDateRange");
 
 		const sDate = new Date(startDate);
 		const eDate = new Date(returnDate);
 		const today = new Date();
+		const lastDate = new Date();
+
+		lastDate.setFullYear(lastDate.getFullYear() + 3, lastDate.getMonth() - 1, lastDate.getDate());
 
 		if (sDate > today) {
 			if (eDate >= sDate) {
-				const {
-					startDateDiv, nextStartMonthSpan, selectedStartMonthYearSpan, nextReturnMonthSpan, selectedReturnMonthYearSpan,
-				} = this.elements;
+				if (lastDate >= eDate) {
+					// Select start date
+					await this.world.helper.waitFor(locatorStartDate);
+					const el = await this.world.helper.findElement(locatorStartDate);
+					await el.click();
+					await this.setDate(sDate, locatorNextStartMonth, locatorSelectedStartMonthYear, "start", pageName);
 
-				// Select start date
-				await this.world.helper.waitFor(startDateDiv);
-				const el = await this.world.helper.findElement(startDateDiv);
-				await el.click();
-				await this.setDate(sDate, nextStartMonthSpan, selectedStartMonthYearSpan, "start");
+					// Select return date
+					await this.setDate(eDate, locatorNextReturnMonth, locatorSelectedReturnMonthYear, "end", pageName);
 
-				// Select return date
-				await this.setDate(eDate, nextReturnMonthSpan, selectedReturnMonthYearSpan, "end");
-
-				await this.world.sleep(100);
+					await this.world.sleep(100);
+				} else {
+					throw new Error("Return date shouldn't be more than 3 years in advance");
+				}
 			} else {
 				throw new Error("Start date shouldn't be past from the return date");
 			}
@@ -250,29 +272,94 @@ class UrlaubPage extends Page {
 		}
 
 		if (data.startDate && data.returnDate) {
-			await this.setDateRange(data.startDate, data.returnDate);
+			const {
+				startDateDiv, nextStartMonthSpan, selectedStartMonthYearSpan, nextReturnMonthSpan, selectedReturnMonthYearSpan,
+			} = this.elements;
+
+			await this.setDateRange(data.startDate, data.returnDate, startDateDiv, nextStartMonthSpan, selectedStartMonthYearSpan, nextReturnMonthSpan, selectedReturnMonthYearSpan);
 		}
 
 		if (data.noOfAdults) {
 			await this.setTraveller(data.noOfAdults);
 		}
+
+		if (data.clickButton) {
+			const { searchOffersBtn, hotelSelectionPageFirstResMediaDiv } = this.elements;
+
+			await this.clickButton(searchOffersBtn, hotelSelectionPageFirstResMediaDiv);
+		}
 	}
 
 	/**
-     * Search Offers
+     * Click Button
+	 * @param {String} buttonToClick - css or xpath selector element for button
+	 * @param {String} waitForElement - css or xpath selector element for wait
+	 * @param {String} scrollToElement - css or xpath selector element for scroll
      */
-	async searchOffers() {
-		if (this.world.debug) console.log("searchOffers");
+	async clickButton(buttonToClick, waitForElement, scrollToElement = "") {
+		if (this.world.debug) console.log("clickButton");
 
-		const { searchOffersBtn, HotelSelectionPageFirstResMediaDiv } = this.elements;
+		await this.world.helper.waitFor(buttonToClick);
+		const el = await this.world.helper.findElement(buttonToClick);
 
-		await this.world.helper.waitFor(searchOffersBtn);
-		const el = await this.world.helper.findElement(searchOffersBtn);
-		await this.world.helper.scrollToElement(el);
+		const element = (scrollToElement === "") ? el : await this.world.helper.findElement(scrollToElement);
+		await this.world.helper.scrollToElement(element);
 		await el.click();
 
-		await this.world.helper.waitFor(HotelSelectionPageFirstResMediaDiv);
+		await this.world.helper.waitFor(waitForElement);
 		await this.world.sleep(1000);
+	}
+
+	/**
+     * Check Page Name
+	 * @param {String} expectedTitle - name of the page
+     */
+	async checkPageName(expectedTitle) {
+		if (this.world.debug) console.log("checkPageName");
+
+		const { hotelSelectionPageNameSpan } = this.elements;
+
+		await this.world.helper.waitFor(hotelSelectionPageNameSpan);
+		let actualTitle = await this.world.helper.getElementText(hotelSelectionPageNameSpan);
+		actualTitle = actualTitle.replace(". ", "");
+		this.world.expect(actualTitle).to.equal(expectedTitle);
+	}
+
+	/**
+     * Change selections and find the best hotel
+     * @param {Object} data - form data
+     */
+	async findBestHotel(data) {
+		if (this.world.debug) console.log("findBestHotel");
+
+		if (data.startDate && data.returnDate) {
+			const {
+				startDateHotelDiv, nextStartMonthHotelSpan, selectedStartMonthYearHotelSpan, nextReturnMonthHotelSpan, selectedReturnMonthYearHotelSpan,
+			} = this.elements;
+
+			await this.setDateRange(data.startDate, data.returnDate, startDateHotelDiv, nextStartMonthHotelSpan, selectedStartMonthYearHotelSpan, nextReturnMonthHotelSpan, selectedReturnMonthYearHotelSpan, "Hotel");
+		}
+
+		if (data.clickButton) {
+			const { searchOffersBtn, hotelSelectionPageFirstResMediaDiv, directFlightHotelInput } = this.elements;
+
+			await this.clickButton(searchOffersBtn, hotelSelectionPageFirstResMediaDiv, directFlightHotelInput);
+		}
+
+		await this.world.sleep(2000);
+	}
+
+
+	/**
+     * Verify Sorted
+     * @param {String} expectedSortedBy - sorted by
+     */
+	async verifySorted(expectedSortedBy) {
+		if (this.world.debug) console.log("verifySorted");
+
+		if (expectedSortedBy) {
+			// TODO:
+		}
 	}
 }
 

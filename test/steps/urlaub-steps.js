@@ -1,9 +1,17 @@
-const { When } = require("cucumber");
+const { When, Then } = require("cucumber");
 
 When("I fill the search offer form", async function (table) {
 	await this.page.fillSearchOfferForm(table.rowsHash());
 });
 
-When("click Angebote suchen button", async function () {
-	await this.page.searchOffers();
+Then("I expect {string} page should be shown", async function (expectedTitle) {
+	await this.page.checkPageName(expectedTitle);
+});
+
+When("I change selections and find the best hotel", async function (table) {
+	await this.page.findBestHotel(table.rowsHash());
+});
+
+Then("I expect results should be sorted by {string}", async function (expectedSortedBy) {
+	await this.page.verifySorted(expectedSortedBy);
 });
