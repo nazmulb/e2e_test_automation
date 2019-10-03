@@ -36,6 +36,7 @@ class UrlaubPage extends Page {
 			nextReturnMonthHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.end-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
 			selectedReturnMonthYearHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.end-input > div.datepicker-header > div > span[class=\"\"]",
 			directFlightHotelInput: "#directFlight",
+			priceRangeDiv: "#priceRange",
 			starRatingCatInput: "#optCategory{txt}",
 			customerReviewSvg: "#hotelFilter > div.filter.filter-kundenbewertung > label:nth-child({txt}) > svg",
 			hotelsortingSelect: "#hotelsorting > option[value=\"{txt}\"]",
@@ -403,11 +404,11 @@ class UrlaubPage extends Page {
 		}
 
 		if (data.customerReview) {
-			const { customerReviewSvg } = this.elements;
+			const { customerReviewSvg, priceRangeDiv } = this.elements;
 			const custReviewSvg = customerReviewSvg.replace("{txt}", data.customerReview);
 
 			await this.world.helper.waitFor(hotelSelectionPageLoaderSection);
-			await this.clickButton(custReviewSvg, hotelSelectionPageFirstResMediaDiv, true, directFlightHotelInput);
+			await this.clickButton(custReviewSvg, hotelSelectionPageFirstResMediaDiv, true, priceRangeDiv);
 			await this.world.sleep(1000);
 		}
 
