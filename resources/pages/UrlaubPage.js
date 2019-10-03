@@ -507,8 +507,7 @@ class UrlaubPage extends Page {
 
 		await this.world.helper.waitFor(hotelDetailsPageHotelNameDiv);
 		this.expectedHotelName = await this.world.helper.getElementText(hotelDetailsPageHotelNameDiv);
-
-		console.log(this.expectedHotelName);
+		if (this.world.debug) console.log(this.expectedHotelName);
 
 		await this.clickButton(hotelDetailsPageFirstOfferSpan, "", true, offerFilterDiv);
 		await this.world.switchTab(2);
@@ -529,8 +528,7 @@ class UrlaubPage extends Page {
 			await this.world.helper.waitFor(bookingPageHotelNameSpan);
 			let actualHotelName = await this.world.helper.getElementText(bookingPageHotelNameSpan);
 			actualHotelName = actualHotelName.replace("Hotelbeschreibung", "").trim();
-
-			console.log(actualHotelName);
+			if (this.world.debug) console.log(actualHotelName);
 
 			this.world.expect(actualHotelName).to.equal(this.expectedHotelName);
 			await this.world.sleep(2000);
