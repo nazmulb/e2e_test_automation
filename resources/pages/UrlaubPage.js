@@ -444,15 +444,17 @@ class UrlaubPage extends Page {
 	async selectMostExpensiveHotel() {
 		if (this.world.debug) console.log("selectMostExpensiveHotel");
 
-		const { aboutOffersDiv, hotelDetailsPageFirstOfferSpan, hotelListHeadSection } = this.elements;
+		const {
+			aboutOffersDiv, hotelDetailsPageFirstOfferSpan, hotelDetailsPageAjaxLoadSection, hotelListHeadSection,
+		} = this.elements;
 
 		await this.clickButton(aboutOffersDiv, "", true, hotelListHeadSection);
 		await this.world.switchTab(1);
+		await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
 		await this.world.helper.waitFor(hotelDetailsPageFirstOfferSpan);
 
 		await this.world.sleep(2000);
 	}
-
 
 	/**
      * Find Best Fit
