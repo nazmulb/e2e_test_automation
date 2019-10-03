@@ -33,11 +33,9 @@ Then("expect flight time of first result falls within desired time range", async
 });
 
 When("I select the first offer and click {string} button", async function (buttonName) {
-	if (buttonName) {
-		// TODO:
-	}
+	await this.page.selectFirstOffer(buttonName);
 });
 
 Then("I expect the hotel name is same as the one I selected earlier", async function () {
-	// TODO:
+	await this.page.verifyHotelName();
 });

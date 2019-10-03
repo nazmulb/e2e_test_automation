@@ -44,6 +44,9 @@ class UrlaubPage extends Page {
 			dateOfArrivalInput: "#arrival-1573624800",
 			hotelDetailsPageAjaxLoadSection: "section[id=\"ajaxLoad\"][class=\"section_ajaxLoad hidden\"]",
 			offerFilterDiv: "#offerFilter",
+			hotelDetailsPageFirstOfferSpan: "#skeletonOffers > section.skeleton-offers > article.success:nth-child(1) > div > div.price.js-priceBlock > a > span.text",
+			hotelDetailsPageHotelNameDiv: "#hotelInfoBox > div.hotel-info-head.has-bookmarks > div.hotel-name-wrapper > div._styling-h1.hotel-name > div",
+			bookingPageHotelNameSpan: "#vacationSummary > ul > ol.content-left > li.hotel-name > span.value",
 		};
 	}
 
@@ -433,11 +436,11 @@ class UrlaubPage extends Page {
 	async selectMostExpensiveHotel() {
 		if (this.world.debug) console.log("selectMostExpensiveHotel");
 
-		const { aboutOffersDiv, hotelDetailsPageAjaxLoadSection, hotelListHeadSection } = this.elements;
+		const { aboutOffersDiv, hotelDetailsPageFirstOfferSpan, hotelListHeadSection } = this.elements;
 
 		await this.clickButton(aboutOffersDiv, "", true, hotelListHeadSection);
 		await this.world.switchTab(1);
-		await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+		await this.world.helper.waitFor(hotelDetailsPageFirstOfferSpan);
 
 		await this.world.sleep(2000);
 	}
@@ -480,6 +483,50 @@ class UrlaubPage extends Page {
 		}
 
 		await this.world.sleep(1000);
+	}
+
+	/**
+     * Select The First Offer
+     */
+	async selectFirstOffer() {
+		if (this.world.debug) console.log("selectFirstOffer");
+
+		const {
+			hotelDetailsPageHotelNameDiv, hotelDetailsPageFirstOfferSpan, bookingPageHotelNameSpan, offerFilterDiv,
+		} = this.elements;
+
+		await this.world.helper.waitFor(hotelDetailsPageHotelNameDiv);
+		this.expectedHotelName = await this.world.helper.getElementText(hotelDetailsPageHotelNameDiv);
+
+		console.log(this.expectedHotelName);
+
+		await this.clickButton(hotelDetailsPageFirstOfferSpan, "", true, offerFilterDiv);
+		await this.world.switchTab(2);
+		await this.world.helper.waitFor(bookingPageHotelNameSpan);
+
+		await this.world.sleep(2000);
+	}
+
+	/**
+     * Verify the name of the hotel
+     */
+	async verifyHotelName() {
+		if (this.world.debug) console.log("verifyHotelName");
+
+		if (this.expectedHotelName) {
+			const { bookingPageHotelNameSpan } = this.elements;
+
+			await this.world.helper.waitFor(bookingPageHotelNameSpan);
+			const actualHotelName = await this.world.helper.getElementText(bookingPageHotelNameSpan);
+			actualHotelName.replace("Hotelbeschreibung", "");
+
+			console.log(actualHotelName);
+
+			this.world.expect(actualHotelName).to.equal(this.expectedHotelName);
+			await this.world.sleep(2000);
+		} else {
+			throw new Error("Couldn't find the hotel name");
+		}
 	}
 }
 
