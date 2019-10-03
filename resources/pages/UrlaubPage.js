@@ -517,8 +517,8 @@ class UrlaubPage extends Page {
 			const { bookingPageHotelNameSpan } = this.elements;
 
 			await this.world.helper.waitFor(bookingPageHotelNameSpan);
-			const actualHotelName = await this.world.helper.getElementText(bookingPageHotelNameSpan);
-			actualHotelName.replace("Hotelbeschreibung", "");
+			let actualHotelName = await this.world.helper.getElementText(bookingPageHotelNameSpan);
+			actualHotelName = actualHotelName.replace("Hotelbeschreibung", "").trim();
 
 			console.log(actualHotelName);
 
