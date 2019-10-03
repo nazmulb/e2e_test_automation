@@ -25,7 +25,7 @@ When("select some options to find best fit", async function (table) {
 });
 
 Then("I count how many options with direct flights", async function () {
-	// TODO:
+	await this.page.countDirectFlights();
 });
 
 Then("expect flight time of first result falls within desired time range", async function () {

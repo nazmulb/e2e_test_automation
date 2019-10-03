@@ -47,6 +47,8 @@ class UrlaubPage extends Page {
 			offerFilterDiv: "#offerFilter",
 			hotelDetailsPageFirstOfferSpan: "#skeletonOffers > section.skeleton-offers > article.success:nth-child(1) > div > div.price.js-priceBlock > a > span.text",
 			hotelDetailsPageHotelNameDiv: "#hotelInfoBox > div.hotel-info-head.has-bookmarks > div.hotel-name-wrapper > div._styling-h1.hotel-name > div",
+			hotelDetailsPageDurationDeparture: "#skeletonOffers > section.skeleton-offers > article > div > div.duration > div.duration-departure > div > span:nth-child(3)",
+			hotelDetailsPageDurationReturn: "#skeletonOffers > section.skeleton-offers > article > div > div.duration > div.duration-return > div > span:nth-child(3)",
 			bookingPageHotelNameSpan: "#vacationSummary > ul > ol.content-left > li.hotel-name > span.value",
 			departureTimeRangeDiv: "#departureTimeRange > div > div:nth-child(1) > div",
 			arrivalTimeRangeDiv: "#departureTimeRange > div > div:nth-child(3) > div",
@@ -551,7 +553,58 @@ class UrlaubPage extends Page {
 			}
 		}
 
-		await this.world.sleep(10000);
+		await this.world.sleep(2000);
+	}
+
+	/**
+     * Count Direct Flights
+     */
+	async countDirectFlights() {
+		if (this.world.debug) console.log("countDirectFlights");
+
+		const {
+			hotelDetailsPageDurationDeparture, hotelDetailsPageDurationReturn, hotelDetailsPageAjaxLoadSection, hotelDetailsPageHotelNameDiv,
+		} = this.elements;
+
+		let departureDirectFlights; let returnDirectFlights;
+
+		await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+		await this.world.helper.waitFor(hotelDetailsPageHotelNameDiv);
+		await this.world.sleep(1000);
+
+		await this.world.helper.waitFor(hotelDetailsPageDurationDeparture);
+		let flightElements = await this.world.helper.findElements(hotelDetailsPageDurationDeparture);
+
+		if (flightElements) {
+			departureDirectFlights = await Promise.all(flightElements.map(async function (flightElement) {
+				const flightText = await flightElement.getText();
+				const flight = flightText.match(/Direktflug/g);
+				return flight;
+			}));
+		}
+
+		departureDirectFlights = departureDirectFlights.filter((i) => i); // removing null
+		if (this.world.debug) console.log(departureDirectFlights.length);
+
+		await this.world.helper.waitFor(hotelDetailsPageDurationReturn);
+		flightElements = await this.world.helper.findElements(hotelDetailsPageDurationReturn);
+
+		if (flightElements) {
+			returnDirectFlights = await Promise.all(flightElements.map(async function (flightElement) {
+				const flightText = await flightElement.getText();
+				const flight = flightText.match(/Direktflug/g);
+				return flight;
+			}));
+		}
+
+		returnDirectFlights = returnDirectFlights.filter((i) => i); // removing null
+		if (this.world.debug) console.log(returnDirectFlights.length);
+
+		const totalDirectFlights = departureDirectFlights.length > returnDirectFlights.length ? returnDirectFlights.length : departureDirectFlights.length;
+		if (this.world.debug) console.log(totalDirectFlights);
+
+		await this.world.attach(`Total direct flights: ${totalDirectFlights}`);
+		await this.world.sleep(2000);
 	}
 
 	/**
