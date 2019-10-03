@@ -27,6 +27,7 @@ class UrlaubPage extends Page {
 			travellerApplyButton: "#travellerLayer > div.submit > button",
 			searchOffersBtn: "#submit",
 			hotelSelectionPageFirstResMediaDiv: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.media.media-fullscreen.js-media.js-showFullscreenSlider.media-loaded",
+			hotelSelectionPageLoaderSection: "section[id=\"ajaxLoadSkeleton\"][style=\"display: none;\"]",
 			currentPageNameSpan: "#bookingProcess > div > ul > li.active > span > span",
 			startDateHotelDiv: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-input-wrapper.datepicker-input-wrapper-start > div",
 			nextStartMonthHotelSpan: "#flattrip > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-formfilter > div > div > div.datepicker-layer.start-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
@@ -355,19 +356,21 @@ class UrlaubPage extends Page {
 	async findBestHotel(data) {
 		if (this.world.debug) console.log("findBestHotel");
 
-		const { hotelSelectionPageFirstResMediaDiv, directFlightHotelInput } = this.elements;
+		const { hotelSelectionPageFirstResMediaDiv, hotelSelectionPageLoaderSection, directFlightHotelInput } = this.elements;
 
 		if (data.startDate && data.returnDate) {
 			const {
 				startDateHotelDiv, nextStartMonthHotelSpan, selectedStartMonthYearHotelSpan, nextReturnMonthHotelSpan, selectedReturnMonthYearHotelSpan,
 			} = this.elements;
 
+			await this.world.helper.waitFor(hotelSelectionPageLoaderSection);
 			await this.setDateRange(data.startDate, data.returnDate, startDateHotelDiv, nextStartMonthHotelSpan, selectedStartMonthYearHotelSpan, nextReturnMonthHotelSpan, selectedReturnMonthYearHotelSpan, "Hotel");
 		}
 
 		if (data.clickButton) {
 			const { searchOffersBtn } = this.elements;
 
+			await this.world.helper.waitFor(hotelSelectionPageLoaderSection);
 			await this.clickButton(searchOffersBtn, hotelSelectionPageFirstResMediaDiv, true, directFlightHotelInput);
 		}
 
@@ -376,6 +379,7 @@ class UrlaubPage extends Page {
 			const number = (data.starRating === "beliebig") ? -1 : Math.round(parseInt(data.starRating) / 2);
 			const starRateInput = starRatingCatInput.replace("{txt}", number);
 
+			await this.world.helper.waitFor(hotelSelectionPageLoaderSection);
 			await this.clickButton(starRateInput, hotelSelectionPageFirstResMediaDiv, true, directFlightHotelInput);
 			await this.world.sleep(1000);
 		}
@@ -384,6 +388,7 @@ class UrlaubPage extends Page {
 			const { customerReviewSvg } = this.elements;
 			const custReviewSvg = customerReviewSvg.replace("{txt}", data.customerReview);
 
+			await this.world.helper.waitFor(hotelSelectionPageLoaderSection);
 			await this.clickButton(custReviewSvg, hotelSelectionPageFirstResMediaDiv, true, directFlightHotelInput);
 			await this.world.sleep(1000);
 		}
@@ -392,6 +397,7 @@ class UrlaubPage extends Page {
 			const { hotelsortingSelect } = this.elements;
 			const sortingSelect = hotelsortingSelect.replace("{txt}", data.sortBy.replace(" ", "_"));
 
+			await this.world.helper.waitFor(hotelSelectionPageLoaderSection);
 			await this.clickButton(sortingSelect, hotelSelectionPageFirstResMediaDiv);
 			await this.world.sleep(1000);
 		}
@@ -408,7 +414,9 @@ class UrlaubPage extends Page {
 		if (this.world.debug) console.log("verifySorted");
 
 		if (expectedSortedBy) {
-			const { priceBoxStrong } = this.elements;
+			const { priceBoxStrong, hotelSelectionPageLoaderSection } = this.elements;
+
+			await this.world.helper.waitFor(hotelSelectionPageLoaderSection);
 			let actualSort = [];
 
 			await this.world.helper.waitFor(priceBoxStrong);
