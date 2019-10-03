@@ -1,10 +1,6 @@
 @urlaub
 Feature: Find the best hotel and try to book
-  @mute
-  Scenario: Find
-    Given I navigate to the "urlaub" page
-    Then I count how many options with direct flights
-  
+
   Scenario: Find the best hotel
     Given I navigate to the "urlaub" page
     When I fill the search offer form

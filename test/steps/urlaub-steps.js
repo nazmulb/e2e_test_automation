@@ -29,7 +29,7 @@ Then("I count how many options with direct flights", async function () {
 });
 
 Then("expect flight time of first result falls within desired time range", async function () {
-	// TODO:
+	await this.page.verifyFlightTimeOfFirstResult();
 });
 
 When("I select the first offer and click {string} button", async function (buttonName) {

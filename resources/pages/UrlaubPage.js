@@ -50,6 +50,8 @@ class UrlaubPage extends Page {
 			hotelDetailsPageHotelNameDiv: "#hotelInfoBox > div.hotel-info-head.has-bookmarks > div.hotel-name-wrapper > div._styling-h1.hotel-name > div",
 			hotelDetailsPageDurationDeparture: "#skeletonOffers > section.skeleton-offers > article > div > div.duration > div.duration-departure > div > span:nth-child(3)",
 			hotelDetailsPageDurationReturn: "#skeletonOffers > section.skeleton-offers > article > div > div.duration > div.duration-return > div > span:nth-child(3)",
+			hotelDetailsPageDurationDepartureTime: "#skeletonOffers > section.skeleton-offers > article:nth-child(1) > div > div.duration > div.duration-departure > div > span:nth-child(1)",
+			hotelDetailsPageDurationReturnTime: "#skeletonOffers > section.skeleton-offers > article:nth-child(1) > div > div.duration > div.duration-return > div > span:nth-child(1)",
 			bookingPageHotelNameSpan: "#vacationSummary > ul > ol.content-left > li.hotel-name > span.value",
 			departureTimeRangeDiv: "#departureTimeRange > div > div:nth-child(1) > div",
 			arrivalTimeRangeDiv: "#departureTimeRange > div > div:nth-child(3) > div",
@@ -81,6 +83,28 @@ class UrlaubPage extends Page {
 		offset = (offset > 110) ? 110 : offset;
 
 		return offset;
+	}
+
+	/**
+     * Check the range
+	 * @param {String} a
+	 * @param {String} b
+	 * @param {String} x
+	 * @param {String} y
+	 * @returns {Boolean}
+     */
+	checkRange(a, b, x, y) {
+		const x1 = parseInt(a.replace(":", ""));
+		const y1 = parseInt(b.replace(":", ""));
+
+		const x2 = parseInt(x.replace(":", ""));
+		const y2 = parseInt(y.replace(":", ""));
+
+		if (x2 <= x1 && y2 >= y1) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -491,6 +515,8 @@ class UrlaubPage extends Page {
 		await this.world.helper.scrollToElement(element);
 		await this.world.sleep(1000);
 
+		this.dataInputFindBestFit = data;
+
 		if (data.departureTime) {
 			const { departureTimeRangeDiv } = this.elements;
 
@@ -605,6 +631,41 @@ class UrlaubPage extends Page {
 		if (this.world.debug) console.log(totalDirectFlights);
 
 		await this.world.attach(`Total direct flights: ${totalDirectFlights}`);
+		await this.world.sleep(2000);
+	}
+
+	/**
+     * Verify Flight Time Of First Result
+     */
+	async verifyFlightTimeOfFirstResult() {
+		if (this.world.debug) console.log("verifyFlightTimeOfFirstResult");
+
+		const {
+			hotelDetailsPageDurationDepartureTime, hotelDetailsPageDurationReturnTime, hotelDetailsPageAjaxLoadSection, hotelDetailsPageHotelNameDiv,
+		} = this.elements;
+
+		let departureTimeRange; let returnTimeRange;
+
+		await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+		await this.world.helper.waitFor(hotelDetailsPageHotelNameDiv);
+		await this.world.sleep(1000);
+
+		await this.world.helper.waitFor(hotelDetailsPageDurationDepartureTime);
+		departureTimeRange = await this.world.helper.getElementText(hotelDetailsPageDurationDepartureTime);
+		departureTimeRange = departureTimeRange.match(/[+-]?([0-9]*[:])?[0-9]+/g);
+		if (this.world.debug) console.dir(departureTimeRange);
+
+		let actual = this.checkRange(departureTimeRange[0], departureTimeRange[1], this.dataInputFindBestFit.departureTime, this.dataInputFindBestFit.arrivalTime);
+		this.world.expect(actual).to.equal(true);
+
+		await this.world.helper.waitFor(hotelDetailsPageDurationReturnTime);
+		returnTimeRange = await this.world.helper.getElementText(hotelDetailsPageDurationReturnTime);
+		returnTimeRange = returnTimeRange.match(/[+-]?([0-9]*[:])?[0-9]+/g);
+		if (this.world.debug) console.dir(returnTimeRange);
+
+		actual = this.checkRange(returnTimeRange[0], returnTimeRange[1], this.dataInputFindBestFit.returnDepartureTime, this.dataInputFindBestFit.returnArrivalTime);
+		this.world.expect(actual).to.equal(true);
+
 		await this.world.sleep(2000);
 	}
 
