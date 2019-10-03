@@ -1,6 +1,16 @@
 @urlaub
 Feature: Find the best hotel and try to book
-
+  
+  @mute
+  Scenario: Find
+    Given I navigate to the "urlaub" page
+    When select some options to find best fit
+      | departureTime       | 04:00       |
+      | arrivalTime         | 21:00       |
+      | returnDepartureTime | 00:00       |
+      | returnArrivalTime   | 12:00       |
+      | dateOfArrival       | 2019-11-13  |
+  
   Scenario: Find the best hotel
     Given I navigate to the "urlaub" page
     When I fill the search offer form

@@ -48,6 +48,10 @@ class UrlaubPage extends Page {
 			hotelDetailsPageFirstOfferSpan: "#skeletonOffers > section.skeleton-offers > article.success:nth-child(1) > div > div.price.js-priceBlock > a > span.text",
 			hotelDetailsPageHotelNameDiv: "#hotelInfoBox > div.hotel-info-head.has-bookmarks > div.hotel-name-wrapper > div._styling-h1.hotel-name > div",
 			bookingPageHotelNameSpan: "#vacationSummary > ul > ol.content-left > li.hotel-name > span.value",
+			departureTimeRangeDiv: "#departureTimeRange > div > div:nth-child(1) > div",
+			arrivalTimeRangeDiv: "#departureTimeRange > div > div:nth-child(3) > div",
+			returnDepartureTimeRangeDiv: "#returnTimeRange > div > div:nth-child(1) > div",
+			returnArrivalTimeRangeDiv: "#returnTimeRange > div > div:nth-child(3) > div",
 		};
 	}
 
@@ -62,6 +66,18 @@ class UrlaubPage extends Page {
 		if (this.world.debug) console.log("generateDateSelector");
 
 		return `${dateTd} > div.datepicker-layer.${input}-input > div.datepicker-wrapper > div > div > div.month.month-${dateObject.getMonth()}.year-${dateObject.getFullYear()} > table > tbody > tr > td.day.day-${dateObject.getDate()}`;
+	}
+
+	/**
+     * Generate Offset
+	 * @param {String} time
+	 * @returns {Number}
+     */
+	generateOffset(time, from = 0) {
+		let offset = ((from > 0) ? ((from - parseInt(time)) * 10) : (parseInt(time) * 10));
+		offset = (offset > 110) ? 110 : offset;
+
+		return offset;
 	}
 
 	/**
@@ -465,34 +481,77 @@ class UrlaubPage extends Page {
 
 		await this.world.sleep(1000);
 
+		const { hotelDetailsPageAjaxLoadSection, offerFilterDiv } = this.elements;
+
+		await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+		const element = await this.world.helper.findElement(offerFilterDiv);
+		await this.world.helper.scrollToElement(element);
+		await this.world.sleep(1000);
+
 		if (data.departureTime) {
-			// TODO:
+			const { departureTimeRangeDiv } = this.elements;
+
+			const xOffset = this.generateOffset(data.departureTime);
+
+			if (xOffset > 0) {
+				await this.world.helper.moveSlider(departureTimeRangeDiv, xOffset, 0);
+
+				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+				await this.world.sleep(1000);
+			}
 		}
 
 		if (data.arrivalTime) {
-			// TODO:
+			const { arrivalTimeRangeDiv } = this.elements;
+
+			const xOffset = this.generateOffset(data.arrivalTime, 24);
+
+			if (xOffset > 0) {
+				await this.world.helper.moveSlider(arrivalTimeRangeDiv, -xOffset, 0);
+
+				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+				await this.world.sleep(1000);
+			}
 		}
 
 		if (data.returnDepartureTime) {
-			// TODO:
+			const { returnDepartureTimeRangeDiv } = this.elements;
+
+			const xOffset = this.generateOffset(data.returnDepartureTime);
+
+			if (xOffset > 0) {
+				await this.world.helper.moveSlider(returnDepartureTimeRangeDiv, xOffset, 0);
+
+				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+				await this.world.sleep(1000);
+			}
 		}
 
 		if (data.returnArrivalTime) {
-			// TODO:
+			const { returnArrivalTimeRangeDiv } = this.elements;
+
+			const xOffset = this.generateOffset(data.returnArrivalTime, 24);
+
+			if (xOffset > 0) {
+				await this.world.helper.moveSlider(returnArrivalTimeRangeDiv, -xOffset, 0);
+
+				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+				await this.world.sleep(1000);
+			}
 		}
 
 		if (data.dateOfArrival) {
-			const { dateOfArrivalInput, hotelDetailsPageAjaxLoadSection, offerFilterDiv } = this.elements;
+			const { dateOfArrivalInput } = this.elements;
 
 			if (data.dateOfArrival === "2019-11-13") {
-				await this.clickButton(dateOfArrivalInput, hotelDetailsPageAjaxLoadSection, true, offerFilterDiv);
+				await this.clickButton(dateOfArrivalInput, hotelDetailsPageAjaxLoadSection, false);
 				await this.world.sleep(1000);
 			} else {
 				throw new Error("Date of arrival should be 2019-11-13");
 			}
 		}
 
-		await this.world.sleep(1000);
+		await this.world.sleep(10000);
 	}
 
 	/**

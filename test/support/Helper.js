@@ -230,6 +230,29 @@ class Helper {
 	}
 
 	/**
+     * Move Slider
+     * @param {WebElement} element - the element
+	 * @param {Number} xOffset - x offset
+	 * @param {Number} yOffset - y offset
+     * @example
+     *      helper.scrollToElement(el, 45, 0);
+     */
+	async moveSlider(element, xOffset, yOffset) {
+		if (this.world.debug) console.log("moveSlider");
+
+		await this.world.helper.waitFor(element);
+
+		const el = await this.world.helper.findElement(element);
+		await this.world.driver.actions()
+			.move({ x: xOffset, y: yOffset, origin: el })
+			.press()
+			.release()
+			.perform();
+
+		await this.world.sleep(1000);
+	}
+
+	/**
      * Reload or refresh page
      * @example
      *      helper.refresh();
