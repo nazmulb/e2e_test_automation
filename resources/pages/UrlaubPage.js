@@ -40,10 +40,9 @@ class UrlaubPage extends Page {
 			hotelsortingSelect: "#hotelsorting > option[value=\"{txt}\"]",
 			priceBoxStrong: "#hotelList > div.skeleton-wrapper > article > div.content > div.priceBox > div > a > div > strong",
 			aboutOffersDiv: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.content > div.priceBox > a > div",
-			hotelDetailsDepartureTimeDiv: "#departureTimeRange > div > div:nth-child(1) > div",
 			hotelListHeadSection: "#hotelListHeadSkeleton",
 			dateOfArrivalInput: "#arrival-1573624800",
-			skeletonOffersArticle: "#skeletonOffers > section.skeleton-offers > article:nth-child(1)",
+			hotelDetailsPageAjaxLoadSection: "section[id=\"ajaxLoad\"][class=\"section_ajaxLoad hidden\"]",
 			offerFilterDiv: "#offerFilter",
 		};
 	}
@@ -434,11 +433,11 @@ class UrlaubPage extends Page {
 	async selectMostExpensiveHotel() {
 		if (this.world.debug) console.log("selectMostExpensiveHotel");
 
-		const { aboutOffersDiv, hotelDetailsDepartureTimeDiv, hotelListHeadSection } = this.elements;
+		const { aboutOffersDiv, hotelDetailsPageAjaxLoadSection, hotelListHeadSection } = this.elements;
 
 		await this.clickButton(aboutOffersDiv, "", true, hotelListHeadSection);
 		await this.world.switchTab(1);
-		await this.world.helper.waitFor(hotelDetailsDepartureTimeDiv);
+		await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
 
 		await this.world.sleep(2000);
 	}
@@ -450,6 +449,8 @@ class UrlaubPage extends Page {
      */
 	async findBestFit(data) {
 		if (this.world.debug) console.log("findBestFit");
+
+		await this.world.sleep(1000);
 
 		if (data.departureTime) {
 			// TODO:
@@ -468,10 +469,10 @@ class UrlaubPage extends Page {
 		}
 
 		if (data.dateOfArrival) {
-			const { dateOfArrivalInput, skeletonOffersArticle, offerFilterDiv } = this.elements;
+			const { dateOfArrivalInput, hotelDetailsPageAjaxLoadSection, offerFilterDiv } = this.elements;
 
 			if (data.dateOfArrival === "2019-11-13") {
-				await this.clickButton(dateOfArrivalInput, skeletonOffersArticle, true, offerFilterDiv);
+				await this.clickButton(dateOfArrivalInput, hotelDetailsPageAjaxLoadSection, true, offerFilterDiv);
 				await this.world.sleep(1000);
 			} else {
 				throw new Error("Date of arrival should be 2019-11-13");
