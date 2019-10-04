@@ -24,8 +24,8 @@ When("select some options to find best fit", async function (table) {
 	await this.page.findBestFit(table.rowsHash());
 });
 
-Then("I count how many options with direct flights", async function () {
-	await this.page.countDirectFlights();
+Then("I expect the direct flights count should be grater than {int}", async function (count) {
+	await this.page.countDirectFlights(count);
 });
 
 Then("expect flight time of first result falls within desired time range", async function () {

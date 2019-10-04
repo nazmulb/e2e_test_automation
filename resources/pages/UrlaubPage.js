@@ -585,8 +585,9 @@ class UrlaubPage extends Page {
 
 	/**
      * Count Direct Flights
+	 * @param {Number} count
      */
-	async countDirectFlights() {
+	async countDirectFlights(count) {
 		if (this.world.debug) console.log("countDirectFlights");
 
 		const {
@@ -630,7 +631,14 @@ class UrlaubPage extends Page {
 		const totalDirectFlights = departureDirectFlights.length > returnDirectFlights.length ? returnDirectFlights.length : departureDirectFlights.length;
 		if (this.world.debug) console.log(totalDirectFlights);
 
-		await this.world.attach(`Total direct flights: ${totalDirectFlights}`);
+		try {
+			this.world.expect(totalDirectFlights).to.be.above(count);
+		} catch (e) {
+			await this.world.helper.takeScreenshot();
+		} finally {
+			await this.world.attach(`Total direct flights: ${totalDirectFlights}`);
+		}
+
 		await this.world.sleep(2000);
 	}
 

@@ -14,7 +14,7 @@ class ChromeheadlessDriver extends Driver {
 		return new webdriver
 			.Builder()
 			.forBrowser("chrome")
-			.setChromeOptions(new chrome.Options().addArguments("--window-size=1400x1000").headless())
+			.setChromeOptions(new chrome.Options().addArguments("--window-size=1440x900").headless())
 			.build();
 	}
 }

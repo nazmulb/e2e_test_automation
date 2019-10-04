@@ -32,7 +32,9 @@ class World {
 
 		// browser driver instance
 		this.driver = Driver.create(this.pf).build();
-		this.driver.manage().window().maximize();
+		this.driver.manage().window().setRect({
+			width: 1440, height: 900, x: 0, y: 0,
+		});
 
 		this.selenium = selenium;
 		this.expect = expect;
