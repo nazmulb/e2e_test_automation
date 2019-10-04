@@ -10,6 +10,7 @@ class UrlaubPage extends Page {
      */
 	get elements() {
 		return {
+			cookieButton: "#CybotCookiebotDialogBodyButtonAccept",
 			destinationInput: "#idestflat",
 			locationLayerDiv: "div.location-layer.show-layer-on",
 			aiduacWrapperDiv: "#ac_old > div.ac-box > div.ac-item.location.layer-version > div.aiduac-wrapper.destinations.aiduac-open",
@@ -353,6 +354,14 @@ class UrlaubPage extends Page {
      */
 	async fillSearchOfferForm(data) {
 		if (this.world.debug) console.log("fillSearchOfferForm");
+
+		const { cookieButton } = this.elements;
+
+		const els = await this.world.helper.findElements(cookieButton);
+		if (els[0]) {
+			console.log(els);
+			await this.clickButton(cookieButton, "", false);
+		}
 
 		if (data.destination) {
 			await this.selectDestination(data.destination);
