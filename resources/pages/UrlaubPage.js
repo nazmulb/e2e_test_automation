@@ -359,7 +359,7 @@ class UrlaubPage extends Page {
 
 		const els = await this.world.helper.findElements(cookieButton);
 		if (els[0]) {
-			console.log(els);
+			if (this.world.debug) console.log(els);
 			await this.clickButton(cookieButton, "", false);
 		}
 
