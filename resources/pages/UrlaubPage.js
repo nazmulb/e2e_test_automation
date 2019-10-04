@@ -656,7 +656,13 @@ class UrlaubPage extends Page {
 		if (this.world.debug) console.dir(departureTimeRange);
 
 		let actual = this.checkRange(departureTimeRange[0], departureTimeRange[1], this.dataInputFindBestFit.departureTime, this.dataInputFindBestFit.arrivalTime);
-		this.world.expect(actual).to.equal(true);
+
+		try {
+			this.world.expect(actual).to.equal(true);
+		} catch (e) {
+			await this.world.attach(`Departure time range (${departureTimeRange[0]} - ${departureTimeRange[1]}) doesn't fall within the desired time range`);
+			await this.world.helper.takeScreenshot();
+		}
 
 		await this.world.helper.waitFor(hotelDetailsPageDurationReturnTime);
 		returnTimeRange = await this.world.helper.getElementText(hotelDetailsPageDurationReturnTime);
@@ -664,7 +670,13 @@ class UrlaubPage extends Page {
 		if (this.world.debug) console.dir(returnTimeRange);
 
 		actual = this.checkRange(returnTimeRange[0], returnTimeRange[1], this.dataInputFindBestFit.returnDepartureTime, this.dataInputFindBestFit.returnArrivalTime);
-		this.world.expect(actual).to.equal(true);
+
+		try {
+			this.world.expect(actual).to.equal(true);
+		} catch (e) {
+			await this.world.attach(`Return time range (${returnTimeRange[0]} - ${returnTimeRange[1]}) doesn't fall within the desired time range`);
+			await this.world.helper.takeScreenshot();
+		}
 
 		await this.world.sleep(2000);
 	}

@@ -1,5 +1,18 @@
 @urlaub
 Feature: Find the best hotel and try to book
+@mute
+Scenario: Find the best hotel
+  Given I navigate to the "urlaub" page
+  When select some options to find best fit
+      | departureTime       | 04:00       |
+      | arrivalTime         | 21:00       |
+      | returnDepartureTime | 00:00       |
+      | returnArrivalTime   | 12:00       |
+      | dateOfArrival       | 2019-11-13  |
+  Then I count how many options with direct flights
+  And expect flight time of first result falls within desired time range
+  When I select the first offer and click "Zur Buchung" button
+  Then I expect the hotel name is same as the one I selected earlier
 
   Scenario: Find the best hotel
     Given I navigate to the "urlaub" page

@@ -263,6 +263,20 @@ class Helper {
 		await this.world.driver.navigate().refresh();
 		await this.world.sleep(2000);
 	}
+
+	/**
+     * Take Screenshot
+     * @example
+     *      helper.takeScreenshot();
+     */
+	async takeScreenshot() {
+		if (this.world.debug) console.log("takeScreenshot");
+
+		const data = await this.world.driver.takeScreenshot();
+		// Attaching screenshot to report
+		await this.world.attach(data, "image/png");
+		await this.world.sleep(100);
+	}
 }
 
 
