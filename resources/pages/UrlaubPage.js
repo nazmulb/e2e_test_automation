@@ -47,6 +47,7 @@ class UrlaubPage extends Page {
 			dateOfArrivalInput: "#arrival-1573624800",
 			hotelDetailsPageAjaxLoadSection: "section[id=\"ajaxLoad\"][class=\"section_ajaxLoad hidden\"]",
 			offerFilterDiv: "#offerFilter",
+			skeletonOffersSection: "section[id=\"skeletonOffers\"][class=\"section_skeletonOffers\"]",
 			hotelDetailsPageFirstOfferSpan: "#skeletonOffers > section.skeleton-offers > article.success:nth-child(1) > div > div.price.js-priceBlock > a > span.text",
 			hotelDetailsPageHotelNameDiv: "#hotelInfoBox > div.hotel-info-head.has-bookmarks > div.hotel-name-wrapper > div._styling-h1.hotel-name > div",
 			hotelDetailsPageDurationDeparture: "#skeletonOffers > section.skeleton-offers > article > div > div.duration > div.duration-departure > div > span:nth-child(3)",
@@ -532,7 +533,7 @@ class UrlaubPage extends Page {
 
 		await this.checkAndClickCookieBox();
 
-		const { hotelDetailsPageAjaxLoadSection, offerFilterDiv } = this.elements;
+		const { hotelDetailsPageAjaxLoadSection, skeletonOffersSection, offerFilterDiv } = this.elements;
 
 		await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
 		const element = await this.world.helper.findElement(offerFilterDiv);
@@ -550,6 +551,7 @@ class UrlaubPage extends Page {
 				await this.world.helper.moveSlider(departureTimeRangeDiv, xOffset, 0);
 
 				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+				await this.world.helper.waitFor(skeletonOffersSection);
 				await this.world.sleep(1000);
 			}
 		}
@@ -563,6 +565,7 @@ class UrlaubPage extends Page {
 				await this.world.helper.moveSlider(arrivalTimeRangeDiv, -xOffset, 0);
 
 				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+				await this.world.helper.waitFor(skeletonOffersSection);
 				await this.world.sleep(1000);
 			}
 		}
@@ -576,6 +579,7 @@ class UrlaubPage extends Page {
 				await this.world.helper.moveSlider(returnDepartureTimeRangeDiv, xOffset, 0);
 
 				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+				await this.world.helper.waitFor(skeletonOffersSection);
 				await this.world.sleep(1000);
 			}
 		}
@@ -589,6 +593,7 @@ class UrlaubPage extends Page {
 				await this.world.helper.moveSlider(returnArrivalTimeRangeDiv, -xOffset, 0);
 
 				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
+				await this.world.helper.waitFor(skeletonOffersSection);
 				await this.world.sleep(1000);
 			}
 		}
@@ -598,6 +603,7 @@ class UrlaubPage extends Page {
 
 			if (data.dateOfArrival === "2019-11-13") {
 				await this.clickButton(dateOfArrivalInput, hotelDetailsPageAjaxLoadSection, false);
+				await this.world.helper.waitFor(skeletonOffersSection);
 				await this.world.sleep(1000);
 			} else {
 				throw new Error("Date of arrival should be 2019-11-13");
