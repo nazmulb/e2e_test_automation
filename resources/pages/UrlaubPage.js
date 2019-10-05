@@ -349,19 +349,30 @@ class UrlaubPage extends Page {
 	}
 
 	/**
+     * Check and Click Cookie Box
+	 */
+	async checkAndClickCookieBox() {
+		if (this.world.debug) console.log("checkAndClickCookieBox");
+
+		const { cookieButton } = this.elements;
+		await this.world.sleep(1000);
+
+		const els = await this.world.helper.findElements(cookieButton);
+		if (els[0]) {
+			await this.clickButton(cookieButton, "", false);
+		}
+
+		await this.world.sleep(500);
+	}
+
+	/**
      * Fill Search Offer Form
      * @param {Object} data - form data
      */
 	async fillSearchOfferForm(data) {
 		if (this.world.debug) console.log("fillSearchOfferForm");
 
-		const { cookieButton } = this.elements;
-
-		const els = await this.world.helper.findElements(cookieButton);
-		if (els[0]) {
-			if (this.world.debug) console.log(els);
-			await this.clickButton(cookieButton, "", false);
-		}
+		await this.checkAndClickCookieBox();
 
 		if (data.destination) {
 			await this.selectDestination(data.destination);
@@ -407,6 +418,8 @@ class UrlaubPage extends Page {
      */
 	async findBestHotel(data) {
 		if (this.world.debug) console.log("findBestHotel");
+
+		await this.checkAndClickCookieBox();
 
 		const { hotelSelectionPageFirstResMediaDiv, hotelSelectionPageLoaderSection, directFlightHotelInput } = this.elements;
 
@@ -516,6 +529,8 @@ class UrlaubPage extends Page {
 		if (this.world.debug) console.log("findBestFit");
 
 		await this.world.sleep(1000);
+
+		await this.checkAndClickCookieBox();
 
 		const { hotelDetailsPageAjaxLoadSection, offerFilterDiv } = this.elements;
 
