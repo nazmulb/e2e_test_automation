@@ -550,7 +550,6 @@ class UrlaubPage extends Page {
 			if (xOffset > 0) {
 				await this.world.helper.moveSlider(departureTimeRangeDiv, xOffset, 0);
 
-				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
 				await this.world.helper.waitFor(skeletonOffersSection);
 				await this.world.sleep(1000);
 			}
@@ -564,7 +563,6 @@ class UrlaubPage extends Page {
 			if (xOffset > 0) {
 				await this.world.helper.moveSlider(arrivalTimeRangeDiv, -xOffset, 0);
 
-				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
 				await this.world.helper.waitFor(skeletonOffersSection);
 				await this.world.sleep(1000);
 			}
@@ -578,7 +576,6 @@ class UrlaubPage extends Page {
 			if (xOffset > 0) {
 				await this.world.helper.moveSlider(returnDepartureTimeRangeDiv, xOffset, 0);
 
-				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
 				await this.world.helper.waitFor(skeletonOffersSection);
 				await this.world.sleep(1000);
 			}
@@ -592,7 +589,6 @@ class UrlaubPage extends Page {
 			if (xOffset > 0) {
 				await this.world.helper.moveSlider(returnArrivalTimeRangeDiv, -xOffset, 0);
 
-				await this.world.helper.waitFor(hotelDetailsPageAjaxLoadSection);
 				await this.world.helper.waitFor(skeletonOffersSection);
 				await this.world.sleep(1000);
 			}
@@ -602,8 +598,7 @@ class UrlaubPage extends Page {
 			const { dateOfArrivalInput } = this.elements;
 
 			if (data.dateOfArrival === "2019-11-13") {
-				await this.clickButton(dateOfArrivalInput, hotelDetailsPageAjaxLoadSection, false);
-				await this.world.helper.waitFor(skeletonOffersSection);
+				await this.clickButton(dateOfArrivalInput, skeletonOffersSection, false);
 				await this.world.sleep(1000);
 			} else {
 				throw new Error("Date of arrival should be 2019-11-13");
