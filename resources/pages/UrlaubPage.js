@@ -631,7 +631,7 @@ class UrlaubPage extends Page {
 			if (data.dateOfArrival) {
 				let date = data.dateOfArrival.split("-");
 				date = `${date[2]}.${date[1]}.${date[0]}`;
-				console.log(date);
+
 				let ids;
 				const elements = await this.world.helper.findElements(dateOfArrivalLabel);
 				if (elements) {
@@ -639,7 +639,7 @@ class UrlaubPage extends Page {
 						const text = await el.getText();
 						let isMatched = text.match(new RegExp(date, "g"));
 						isMatched = (isMatched) ? isMatched.toString() : isMatched;
-						console.dir(isMatched);
+
 						if (isMatched === date) {
 							const id = await el.getAttribute("for");
 							return id;
@@ -650,7 +650,7 @@ class UrlaubPage extends Page {
 				}
 
 				ids = ids.filter((i) => i); // removing null
-				console.dir(ids);
+				if (this.world.debug) console.dir(ids);
 				const eId = (ids) ? `#${ids[0]}` : null;
 
 				if (eId) {
