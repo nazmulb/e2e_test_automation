@@ -12,8 +12,10 @@ class UrlaubPage extends Page {
 		return {
 			cookieButton: "#CybotCookiebotDialogBodyButtonAccept",
 			destinationInput: "#idestflat",
-			locationLayerDiv: "div.location-layer.show-layer-on",
+			locationLayerDiv: "div[class=\"location-layer show-layer-on\"]",
+			locationLayerHiddenDiv: "div[class=\"location-layer show-layer-on hidden\"]",
 			aiduacWrapperDiv: "#ac_old > div.ac-box > div.ac-item.location.layer-version > div.aiduac-wrapper.destinations.aiduac-open",
+			aiduacContentDestinationsLink: "#ac_old div[class=\"aiduac-content destinations\"] a[data-name=\"{txt}\"]",
 			startDateDiv: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-input-wrapper.datepicker-input-wrapper-start > div",
 			nextStartMonthSpan: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.start-input > div.datepicker-header > span.month-button.month-button-next.icon-arrow-right-bold",
 			selectedStartMonthYearSpan: "#flattrip > div.form > div._input-box._input-box-icon-set._input-box-size-._input-box-datePickerTwoInputs.datepicker-startpage > div > div > div.datepicker-layer.start-input > div.datepicker-header > div > span[class=\"\"]",
@@ -137,13 +139,41 @@ class UrlaubPage extends Page {
 	}
 
 	/**
+     * Check And Click Or Enter
+	 * @param {String} destination
+	 * @param {WebElement} element - the element
+	 */
+	async checkAndClickOrEnter(destination, elementInput) {
+		if (this.world.debug) console.log("checkAndClickOrEnter");
+
+		const { aiduacContentDestinationsLink, aiduacWrapperDiv, locationLayerHiddenDiv } = this.elements;
+
+		const link = aiduacContentDestinationsLink.replace("{txt}", destination);
+		await this.world.helper.waitFor(aiduacWrapperDiv);
+		await this.world.sleep(2000);
+
+		if (this.world.debug) console.log(link);
+
+		const els = await this.world.helper.findElements(link);
+		if (els[0]) {
+			if (this.world.debug) console.log(els);
+			await this.clickButton(link, "", false);
+		} else {
+			await elementInput.sendKeys(this.world.selenium.Key.ENTER);
+		}
+
+		await this.world.helper.waitFor(locationLayerHiddenDiv);
+		await this.world.sleep(1000);
+	}
+
+	/**
      * Select destination
      * @param {String} destination
      */
 	async selectDestination(destination) {
 		if (this.world.debug) console.log("selectDestination");
 
-		const { destinationInput, locationLayerDiv, aiduacWrapperDiv } = this.elements;
+		const { destinationInput, locationLayerDiv } = this.elements;
 
 		await this.world.helper.waitFor(destinationInput);
 		const input = await this.world.helper.findElement(destinationInput);
@@ -151,10 +181,9 @@ class UrlaubPage extends Page {
 		await input.click();
 		await this.world.helper.waitFor(locationLayerDiv);
 		await input.sendKeys(destination);
-		await this.world.helper.waitFor(aiduacWrapperDiv);
-		await this.world.sleep(5000);
-		await input.sendKeys(this.world.selenium.Key.ENTER);
-		await this.world.sleep(1000);
+		await this.world.sleep(2000);
+
+		await this.checkAndClickOrEnter(destination, input);
 	}
 
 	/**
