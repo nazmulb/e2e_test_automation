@@ -627,7 +627,16 @@ class UrlaubPage extends Page {
 			const { dateOfArrivalInput } = this.elements;
 
 			if (data.dateOfArrival === "2019-11-13") {
-				await this.world.sleep(5000);
+				// await this.world.sleep(5000);
+
+				const link = "#offerFilter-arrival div[class=\"offerFilter-list\"] input[type=\"checkbox\"]";
+				const els = await this.world.helper.findElements(link);
+				if (els[0]) {
+					console.log(els);
+				} else {
+					console.log("NOT FOUND!");
+				}
+
 				await this.clickButton(dateOfArrivalInput, skeletonOffersSection, false);
 				await this.world.sleep(1000);
 			} else {
