@@ -46,7 +46,7 @@ class UrlaubPage extends Page {
 			priceBoxStrong: "#hotelList > div.skeleton-wrapper > article > div.content > div.priceBox > div > a > div > strong",
 			aboutOffersDiv: "#hotelList > div.skeleton-wrapper > article:nth-child(1) > div.content > div.priceBox > a > div",
 			hotelListHeadSection: "#hotelListHeadSkeleton",
-			dateOfArrivalInput: "#arrival-1573624800",
+			dateOfArrivalLabel: "#offerFilter-arrival div.offerFilter-list label.offerFilter-listItem.checkbox",
 			hotelDetailsPageAjaxLoadSection: "section[id=\"ajaxLoad\"][class=\"section_ajaxLoad hidden\"]",
 			offerFilterDiv: "#offerFilter",
 			skeletonOffersSection: "section[id=\"skeletonOffers\"][class=\"section_skeletonOffers\"]",
@@ -624,28 +624,42 @@ class UrlaubPage extends Page {
 		}
 
 		if (data.dateOfArrival) {
-			const { dateOfArrivalInput } = this.elements;
+			const { dateOfArrivalLabel } = this.elements;
 
-			if (data.dateOfArrival === "2019-11-13") {
-				// await this.world.sleep(5000);
+			await this.world.sleep(2000);
+
+			if (data.dateOfArrival) {
+				let date = data.dateOfArrival.split("-");
+				date = `${date[2]}.${date[1]}.${date[0]}`;
+				console.log(date);
 				let ids;
-				const link = "#offerFilter-arrival div[class=\"offerFilter-list\"] input[type=\"checkbox\"]";
-				const elements = await this.world.helper.findElements(link);
+				const elements = await this.world.helper.findElements(dateOfArrivalLabel);
 				if (elements) {
 					ids = await Promise.all(elements.map(async function (el) {
-						const id = await el.getAttribute("id");
-						return id;
+						const text = await el.getText();
+						let isMatched = text.match(new RegExp(date, "g"));
+						isMatched = (isMatched) ? isMatched.toString() : isMatched;
+						console.dir(isMatched);
+						if (isMatched === date) {
+							const id = await el.getAttribute("for");
+							return id;
+						}
+
+						return null;
 					}));
-				} else {
-					console.log("NOT FOUND!");
 				}
 
+				ids = ids.filter((i) => i); // removing null
 				console.dir(ids);
+				const eId = (ids) ? `#${ids[0]}` : null;
 
-				await this.clickButton(dateOfArrivalInput, skeletonOffersSection, false);
+				if (eId) {
+					await this.clickButton(eId, skeletonOffersSection, false);
+				}
+
 				await this.world.sleep(1000);
 			} else {
-				throw new Error("Date of arrival should be 2019-11-13");
+				throw new Error("Date of arrival shouldn't be empty");
 			}
 		}
 
