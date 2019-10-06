@@ -627,6 +627,7 @@ class UrlaubPage extends Page {
 			const { dateOfArrivalInput } = this.elements;
 
 			if (data.dateOfArrival === "2019-11-13") {
+				await this.world.sleep(5000);
 				await this.clickButton(dateOfArrivalInput, skeletonOffersSection, false);
 				await this.world.sleep(1000);
 			} else {
