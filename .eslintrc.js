@@ -27,7 +27,7 @@ module.exports = {
     "class-methods-use-this": "off",
     "radix": ["error", "as-needed"],
     "func-names": "off",
-    "max-len": ["error", { "code": 300 }],
+    "max-len": ["error", { "code": 600 }],
     "prefer-arrow-callback": "off",
     "no-await-in-loop": "off",
   },

@@ -1,6 +1,16 @@
 @urlaub
 Feature: Find the best hotel and try to book
 
+Scenario: The best hotel
+    Given I navigate to the "urlaub" page
+    When select some options to find best fit
+      | dateOfArrival       | 2019-11-13  |
+    Then I expect the direct flights count should be grater than 0
+    And expect flight time of first result falls within desired time range
+    When I select the first offer and click "Zur Buchung" button
+    Then I expect the hotel name is same as the one I selected earlier
+  
+  @mute
   Scenario: Find the best hotel
     Given I navigate to the "urlaub" page
     When I fill the search offer form

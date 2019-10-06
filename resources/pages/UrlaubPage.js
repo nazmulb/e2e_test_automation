@@ -628,14 +628,19 @@ class UrlaubPage extends Page {
 
 			if (data.dateOfArrival === "2019-11-13") {
 				// await this.world.sleep(5000);
-
+				let ids;
 				const link = "#offerFilter-arrival div[class=\"offerFilter-list\"] input[type=\"checkbox\"]";
-				const els = await this.world.helper.findElements(link);
-				if (els[0]) {
-					console.log(els);
+				const elements = await this.world.helper.findElements(link);
+				if (elements) {
+					ids = await Promise.all(elements.map(async function (el) {
+						const id = await el.getAttribute("id");
+						return id;
+					}));
 				} else {
 					console.log("NOT FOUND!");
 				}
+
+				console.dir(ids);
 
 				await this.clickButton(dateOfArrivalInput, skeletonOffersSection, false);
 				await this.world.sleep(1000);
