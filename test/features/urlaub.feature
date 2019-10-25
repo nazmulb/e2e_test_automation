@@ -1,4 +1,4 @@
-@urlaub
+@urlaub @mute
 Feature: Find the best hotel and try to book
 
   Scenario: Find the best hotel
