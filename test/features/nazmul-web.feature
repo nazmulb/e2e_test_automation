@@ -1,4 +1,4 @@
-@smoke
+@nazmulweb
 Feature: Nazmul Web
 
   Scenario: View home page and search

@@ -16,9 +16,9 @@ class NazmulWebPage extends Page {
 	}
 
 	/**
-   * Enters a search term into search box and presses enter
-   * @param {string} searchQuery - search query text
-   */
+	 * Enters a search term into search box and presses enter
+	 * @param {string} searchQuery - search query text
+	 */
 	async preformSearch(searchQuery) {
 		if (this.world.debug) console.log("preformSearch");
 		let sq = searchQuery;

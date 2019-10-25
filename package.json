@@ -9,7 +9,7 @@
     "lint": "./node_modules/.bin/eslint resources test report.js cucumber.js",
     "lint:fix": "npm run lint -- --fix",
     "docs": "rm -rf docs && jsdoc -c jsdoc.json -d docs",
-    "git:push": "git add . && git commit -m \"updated codes\" && git push origin master"
+    "git:push": "git add . && git commit -m \"updated codes\" && git push origin invia"
   },
   "pre-commit": [
     "lint"
@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/nazmulb/e2e_test_automation#readme",
   "devDependencies": {
-    "chromedriver": "^76.0.0",
+    "chromedriver": "^77.0.0",
     "eslint": "^6.3.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",

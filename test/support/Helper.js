@@ -87,7 +87,7 @@ class Helper {
 	}
 
 	/**
-     * To find an element on the page
+     * To find an element on the page that match the given search criteria
      * @param {string} locator - css or xpath selector element
      * @returns {WebElementPromise} an element that can be used to issue commands against the located element
      * @example
@@ -103,6 +103,25 @@ class Helper {
 		if (this.world.debug) console.log(`findElement: ${locator}`);
 
 		return this.world.driver.findElement(this.world.selenium.By[selector](locator));
+	}
+
+	/**
+     * To find all elements on the page that match the given search criteria
+     * @param {string} locator - css or xpath selector element
+     * @returns {WebElementPromise} an element that can be used to issue commands against the located element
+     * @example
+     *      helper.findElements("body");
+     */
+	async findElements(locator) {
+		if (!this.world.isBrowser) {
+			throw new Error("Tests are not running on a web browser, no web elements to wait for");
+		}
+
+		const selector = (locator.indexOf("//") === 0) ? "xpath" : "css";
+
+		if (this.world.debug) console.log(`findElements: ${locator}`);
+
+		return this.world.driver.findElements(this.world.selenium.By[selector](locator));
 	}
 
 	/**
@@ -211,6 +230,29 @@ class Helper {
 	}
 
 	/**
+     * Move Slider
+     * @param {WebElement} element - the element
+	 * @param {Number} xOffset - x offset
+	 * @param {Number} yOffset - y offset
+     * @example
+     *      helper.scrollToElement(el, 45, 0);
+     */
+	async moveSlider(element, xOffset, yOffset) {
+		if (this.world.debug) console.log("moveSlider");
+
+		await this.world.helper.waitFor(element);
+
+		const el = await this.world.helper.findElement(element);
+		await this.world.driver.actions()
+			.move({ x: xOffset, y: yOffset, origin: el })
+			.press()
+			.release()
+			.perform();
+
+		await this.world.sleep(1000);
+	}
+
+	/**
      * Reload or refresh page
      * @example
      *      helper.refresh();
@@ -220,6 +262,20 @@ class Helper {
 
 		await this.world.driver.navigate().refresh();
 		await this.world.sleep(2000);
+	}
+
+	/**
+     * Take Screenshot
+     * @example
+     *      helper.takeScreenshot();
+     */
+	async takeScreenshot() {
+		if (this.world.debug) console.log("takeScreenshot");
+
+		const data = await this.world.driver.takeScreenshot();
+		// Attaching screenshot to report
+		await this.world.attach(data, "image/png");
+		await this.world.sleep(100);
 	}
 }
 

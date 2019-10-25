@@ -32,7 +32,9 @@ class World {
 
 		// browser driver instance
 		this.driver = Driver.create(this.pf).build();
-		this.driver.manage().window().maximize();
+		this.driver.manage().window().setRect({
+			width: 1440, height: 900, x: 0, y: 0,
+		});
 
 		this.selenium = selenium;
 		this.expect = expect;
@@ -63,6 +65,20 @@ class World {
 
 	get appUrl() {
 		return this.helper.getAppUrlForEnv(this.env);
+	}
+
+	/**
+	 * Easy switch browser tabs
+	 * @param {Number} tabNum
+	 * @return {TargetLocator}
+	 */
+	async switchTab(tabNum = "0") {
+		if (!this.isBrowser) {
+			throw new Error("Platform set to NONE, no browser no tabs");
+		}
+
+		const allWindowHandels = await this.driver.getAllWindowHandles();
+		return this.driver.switchTo().window(allWindowHandels[tabNum]);
 	}
 
 	/**
